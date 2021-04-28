@@ -149,7 +149,7 @@ public:
         return _calc();
     }
 
-protected:
+private:
     /**
      * @brief  this is where the actual code is
      * @retval (float) position
