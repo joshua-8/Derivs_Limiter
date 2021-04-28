@@ -12,7 +12,7 @@ The formula in this program supports being run at uneven intervals, and allows f
 todo
 
 
-Here are some graphs created with [this](https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0) [Processing](https://processing.org/) program which uses the same formula as I made for this library.
+Here are some graphs created with [this sketch](https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0) made with [Processing](https://processing.org/) program which uses the same formula as I made for this library.
 
 ![position s curve, velocity trapezoidal curve and accel graph](https://github.com/joshua-8/Derivs_Limiter/blob/master/docs/graphs.png)
 
