@@ -2,6 +2,7 @@
 
 https://github.com/joshua-8/Derivs_Limiter
 
+[![arduino-library-badge](https://www.ardu-badge.com/badge/Derivs_Limiter.svg?)](https://www.ardu-badge.com/Derivs_Limiter)
 
 This library can be used to limit the first and second derivative of a variable as it approaches a target value.
 
