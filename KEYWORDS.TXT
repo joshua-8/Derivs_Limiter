@@ -1,12 +1,11 @@
-Derivs_Limiter KEYWORD1
-
-setPositionVelocity KEYWORD2
-setPosition KEYWORD2
-setVelocity KEYWORD2
-setVelLimit KEYWORD2
-setAccelLimit KEYWORD2
-setVelAccelLimits KEYWORD2
-getVelocity KEYWORD2
-getAcceleration KEYWORD2
-getPosition KEYWORD2
-calc KEYWORD2
+Derivs_Limiter 		KEYWORD1	DATA_TYPE
+setPositionVelocity 	KEYWORD2
+setPosition 		KEYWORD2
+setVelocity 		KEYWORD2
+setVelLimit 		KEYWORD2
+setAccelLimit 		KEYWORD2
+setVelAccelLimits 	KEYWORD2
+getVelocity 		KEYWORD2
+getAcceleration 	KEYWORD2
+getPosition 		KEYWORD2
+calc 			KEYWORD2
