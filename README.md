@@ -11,6 +11,12 @@ The formula in this program supports being run at uneven intervals, and allows f
 
 todo
 
+### Notes:
+
+todo
+
+During the part of the profile where velocity is decreased, the acceleration is a bit "spiky."
+
 
 Here are some graphs created with [this sketch](https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0) made with [Processing](https://processing.org/) program which uses the same formula as I made for this library.
 
