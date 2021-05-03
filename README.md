@@ -42,13 +42,13 @@ The formula in this program supports being run at uneven intervals, and allows f
 
 `float getVelocity()`
 
-`float getAcceleration()` _for debugging only. do not expect this to be smooth.
+`float getAcceleration()` _for debugging only._
 
 _**Velocity and/or acceleration limits can be set as INFINITY in order to have no limit.**_
 
 
 ## Notes:
 
-During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid.
+During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid. (Also, note that if the acceleration limit is infinity, this value stays zero when position stops)
 
 [This sketch](https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0) made with [Processing](https://processing.org/) uses the same formula as I made for this library.
