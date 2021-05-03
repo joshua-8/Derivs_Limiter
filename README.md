@@ -42,7 +42,7 @@ The formula in this program supports being run at uneven intervals, and allows f
 
 `float getVelocity()`
 
-`float getAcceleration()` _for debugging, do not expect this to be smooth (and high decellerations aren't shown)
+`float getAcceleration()` _for debugging only. do not expect this to be smooth.
 
 _**Velocity and/or acceleration limits can be set as INFINITY in order to have no limit.**_
 
