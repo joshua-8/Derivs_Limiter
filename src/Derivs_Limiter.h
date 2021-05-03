@@ -156,13 +156,15 @@ private:
      */
     float _calc()
     {
-
         float time = (micros() - lastTime) / 1000000.0;
         if (time == 0) { //if it hasn't been a microsecond since last calculated
             return position;
         }
+
         if (lastTime == 0) {
             time = 0; //in case there's a delay between starting the program and the first calculation avoid jump at start
+            lastTime = micros();
+            return position;
         }
 
         if (abs(target - position) <= abs(velocity * time)) { //basically there
@@ -173,7 +175,7 @@ private:
             if (abs(velocity) < velLimit || !((velocity > 0) == (target - position > 0))) { //if slower than max speed or going the wrong way
                 accel = constrain((target - position > 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //  ...accelerate towards target.
             } else if (abs(velocity) > velLimit + accelLimit * time) { // if going too fast
-                accel = constrain((velocity < 0 ? accelLimit : -accelLimit), velLimit / time, velLimit / time); //  ..slow down
+                accel = constrain((velocity < 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //  ..slow down
             } else { // no acceleration needed
                 velocity = constrain(velocity, -velLimit, velLimit); //ensure within velLimit
                 accel = 0; //coast (at max speed)
@@ -189,9 +191,15 @@ private:
             }
         }
 
-        velocity += accel * time;
+        if (abs(target - position) <= abs(velocity * time + accel * time)) { //basically there (recheck)
+            velocity = (target - position) / time;
+            accel = 0;
+            position = target;
+        } else {
 
-        position += velocity * time;
+            velocity += accel * time;
+            position += velocity * time;
+        }
 
         lastTime = micros();
 
