@@ -38,15 +38,17 @@ The formula in this program supports being run at uneven intervals, and allows f
 
 `void setVelAccelLimits(float velLim, float accLim)`
 
+`float getPosition()`
+
 `float getVelocity()`
 
-`float getAcceleration()`
+`float getAcceleration()` _for debugging, do not expect this to be smooth (and high decellerations aren't shown)
 
-`float getPosition()`
+_**Velocity and/or acceleration limits can be set as INFINITY in order to have no limit.**_
+
 
 ## Notes:
 
-During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating.
-
+During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid.
 
 [This sketch](https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0) made with [Processing](https://processing.org/) uses the same formula as I made for this library.
