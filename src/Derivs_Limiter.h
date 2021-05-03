@@ -177,9 +177,9 @@ private:
 
         } else {
             if (abs(velocity) < velLimit || !((velocity > 0) == (target - position > 0))) { //if slower than max speed or going the wrong way
-                accel = constrain((target - position > 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //  ...accelerate towards target.
-            } else if (abs(velocity) > velLimit + accelLimit * time) { // if going too fast
-                accel = constrain((velocity < 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //  ..slow down
+                accel = constrain((target - position > 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //...accelerate towards target.
+            } else if (abs(velocity) > velLimit + accelLimit * time) { //if going too fast
+                accel = constrain((velocity < 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //...slow down
             } else { //no acceleration needed
                 velocity = constrain(velocity, -velLimit, velLimit); //ensure within velLimit
                 accel = 0; //coast (at max speed)
