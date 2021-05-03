@@ -116,6 +116,7 @@ public:
     }
     /**
      * @brief  get the current acceleration
+     * @note for debugging only, value noisy
      * @retval (float) (units per second per second)
      */
     float getAcceleration()
@@ -162,21 +163,24 @@ private:
         }
 
         if (lastTime == 0) {
-            time = 0; //in case there's a delay between starting the program and the first calculation avoid jump at start
+            //in case there's a delay between starting the program and the first calculation avoid jump at start by just waiting for next time
             lastTime = micros();
             return position;
         }
 
-        if (abs(target - position) <= abs(velocity * time)) { //basically there
+        lastTime = micros();
+
+        if (abs(target - position) <= abs(velocity * time)) { //basically there, set position to target
             velocity = 0;
             accel = 0;
             position = target;
+
         } else {
             if (abs(velocity) < velLimit || !((velocity > 0) == (target - position > 0))) { //if slower than max speed or going the wrong way
                 accel = constrain((target - position > 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //  ...accelerate towards target.
             } else if (abs(velocity) > velLimit + accelLimit * time) { // if going too fast
                 accel = constrain((velocity < 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //  ..slow down
-            } else { // no acceleration needed
+            } else { //no acceleration needed
                 velocity = constrain(velocity, -velLimit, velLimit); //ensure within velLimit
                 accel = 0; //coast (at max speed)
             }
@@ -191,17 +195,15 @@ private:
             }
         }
 
-        if (abs(target - position) <= abs(velocity * time + accel * time)) { //basically there (recheck)
+        if (abs(target - position) <= abs(velocity * time + accel * time)) { //basically there, set position to target (recheck)
             velocity = (target - position) / time;
             accel = 0;
             position = target;
-        } else {
 
+        } else {
             velocity += accel * time;
             position += velocity * time;
         }
-
-        lastTime = micros();
 
         return position;
     }
