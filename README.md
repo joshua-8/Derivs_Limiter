@@ -52,3 +52,5 @@ _**Velocity and/or acceleration limits can be set as INFINITY in order to have n
 Acceleration is not guaranteed to be below the set limit if the target position is changed while position is changing. The priority is to stop in time even if extra acceleration is needed.
 
 During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid. (Also, note that if the acceleration limit is infinity, this value stays zero when position stops)
+
+The type `double` is the same as a float on standard Arduinos, but can provide increased precision on some more powerful processors. 
