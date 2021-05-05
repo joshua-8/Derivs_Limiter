@@ -8,24 +8,24 @@
  */
 class Derivs_Limiter {
 private:
-    float position;
-    float velocity;
-    float accel;
+    double position;
+    double velocity;
+    double accel;
     unsigned long lastTime;
-    float velLimit;
-    float accelLimit;
-    float target;
+    double velLimit;
+    double accelLimit;
+    double target;
 
 public:
     /**
      * @brief  constructor for Derivs_Limiter class
-     * @param  velL: (float) velocity limit (units per second)
-     * @param  accL: (float) acceleration limit (units per second per second)
-     * @param  target: (float) target value to make position approach
-     * @param  pos: (float) starting position (default: 0)
-     * @param  vel: (float) starting velocity (default: 0)
+     * @param  velL: (double) velocity limit (units per second)
+     * @param  accL: (double) acceleration limit (units per second per second)
+     * @param  target: (double) target value to make position approach
+     * @param  pos: (double) starting position (default: 0)
+     * @param  vel: (double) starting velocity (default: 0)
      */
-    Derivs_Limiter(float velL, float accL, float targ = 0, float pos = 0, float vel = 0)
+    Derivs_Limiter(double velL, double accL, double targ = 0, double pos = 0, double vel = 0)
     {
         lastTime = 0;
         velLimit = abs(velL);
@@ -36,20 +36,20 @@ public:
     }
     /**
      * @brief  set position and velocity
-     * @param  pos: (float) default: 0
-     * @param  vel: (float) default: 0
+     * @param  pos: (double) default: 0
+     * @param  vel: (double) default: 0
      */
-    void setPositionVelocity(float pos = 0, float vel = 0)
+    void setPositionVelocity(double pos = 0, double vel = 0)
     {
         position = pos;
         velocity = vel;
     }
     /**
      * @brief  set position
-     * @param  pos: (float) default: 0
+     * @param  pos: (double) default: 0
      * @retval (boolean) true if position changed
      */
-    boolean setPosition(float pos = 0)
+    boolean setPosition(double pos = 0)
     {
         if (pos != position) {
             position = pos;
@@ -59,10 +59,10 @@ public:
     }
     /**
      * @brief  set velocity
-     * @param  vel: (float) default: 0
+     * @param  vel: (double) default: 0
      * @retval (boolean) true if velocity changed
      */
-    boolean setVelocity(float vel = 0)
+    boolean setVelocity(double vel = 0)
     {
         if (vel != velocity) {
             velocity = vel;
@@ -72,10 +72,10 @@ public:
     }
     /**
      * @brief  set velocity limit
-     * @param  velLim: (float) velocity limit (units per second)
+     * @param  velLim: (double) velocity limit (units per second)
      * @retval (boolean) true if limit changed
      */
-    boolean setVelLimit(float velLim)
+    boolean setVelLimit(double velLim)
     {
         if (velLim != velLimit) {
             velLimit = abs(velLim);
@@ -85,10 +85,10 @@ public:
     }
     /**
      * @brief  set acceleration limit
-     * @param  accelLim: (float) acceleration limit (units per second per second)
+     * @param  accelLim: (double) acceleration limit (units per second per second)
      * @retval (boolean) true if limit changed
      */
-    boolean setAccelLimit(float accelLim)
+    boolean setAccelLimit(double accelLim)
     {
         if (accelLim != accelLimit) {
             accelLimit = abs(accelLim);
@@ -98,53 +98,53 @@ public:
     }
     /**
      * @brief  set velocity and acceleration limits
-     * @param  velLim: (float) velocity limit
-     * @param  accLim: (float) acceleration limit
+     * @param  velLim: (double) velocity limit
+     * @param  accLim: (double) acceleration limit
      */
-    void setVelAccelLimits(float velLim, float accLim)
+    void setVelAccelLimits(double velLim, double accLim)
     {
         setVelLimit(velLim);
         setAccelLimit(accLim);
     }
     /**
      * @brief  get the current velocity
-     * @retval (float) (units per second)
+     * @retval (double) (units per second)
      */
-    float getVelocity()
+    double getVelocity()
     {
         return velocity;
     }
     /**
      * @brief  get the current acceleration
      * @note for debugging only, value noisy
-     * @retval (float) (units per second per second)
+     * @retval (double) (units per second per second)
      */
-    float getAcceleration()
+    double getAcceleration()
     {
         return accel;
     }
     /**
      * @brief  get the current position value, but doesn't calculate anything
-     * @retval (float)
+     * @retval (double)
      */
-    float getPosition()
+    double getPosition()
     {
         return position;
     }
     /**
      * @brief  call this as frequently as possible to calculate all the values
-     * @retval (float) position
+     * @retval (double) position
      */
-    float calc()
+    double calc()
     {
         return _calc();
     }
     /**
      * @brief  call this as frequently as possible to calculate all the values
      * @param  _target: set the target position
-     * @retval (float) position
+     * @retval (double) position
      */
-    float calc(float _target)
+    double calc(double _target)
     {
         target = _target;
         return _calc();
@@ -153,11 +153,11 @@ public:
 private:
     /**
      * @brief  this is where the actual code is
-     * @retval (float) position
+     * @retval (double) position
      */
-    float _calc()
+    double _calc()
     {
-        float time = (micros() - lastTime) / 1000000.0;
+        double time = (micros() - lastTime) / 1000000.0;
         if (time == 0) { //if it hasn't been a microsecond since last calculated
             return position;
         }
@@ -186,7 +186,7 @@ private:
             }
 
             if ((velocity > 0) == (target - position > 0)) { //going towards target
-                float stoppingDistance = sq(velocity) / 2 / accelLimit;
+                double stoppingDistance = sq(velocity) / 2 / accelLimit;
                 if (abs(target - position) <= stoppingDistance) { //time to start slowing down
                     accel = -sq(velocity) / 2 / (target - position);
                 } else if (abs(target - position - velocity * time) <= stoppingDistance) { //on the border of needing to slow donw

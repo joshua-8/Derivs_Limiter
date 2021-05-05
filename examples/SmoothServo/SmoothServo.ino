@@ -3,13 +3,13 @@
  * https://github.com/joshua-8/Derivs_Limiter
  * 
  * Connect a servo to power and pin 9,
- *   and/or open the serial plotter to see the smoothed position values.
+ * and/or open the serial plotter to see the smoothed position values.
  */
 #include <Arduino.h>
 #include <Derivs_Limiter.h>
 #include <Servo.h>
 
-Derivs_Limiter limiter = Derivs_Limiter(100, 75);
+Derivs_Limiter limiter = Derivs_Limiter(100, 75); // velocityLimit, accelerationLimit
 Servo myServo;
 void setup()
 {

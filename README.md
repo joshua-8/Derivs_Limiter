@@ -16,7 +16,9 @@ The formula in this program supports being run at uneven intervals, and allows f
 ### Create a Derivs_Limiter object:
 `Derivs_Limiter myLimiter = Derivs_Limiter(velocityLimit, accelLimit);`
 
-`Derivs_Limiter(velocityLimit, accelLimit, targetPos,initialPos, initialVel)`
+`Derivs_Limiter(velocityLimit, accelLimit, targetPos, initialPos, initialVel)`
+
+_**Velocity and/or acceleration limits can be set as INFINITY in order to have no limit.**_
 
 ### Use:
 
@@ -26,29 +28,25 @@ The formula in this program supports being run at uneven intervals, and allows f
 
 ### Settings and other methods:
 
-`void setPositionVelocity(float pos = 0, float vel = 0)`
+`void setPositionVelocity(double pos = 0, double vel = 0)`
 
-`boolean setPosition(float pos = 0)` (true if position changed)
+`boolean setPosition(double pos = 0)` (true if position changed)
 
-`boolean setVelocity(float vel = 0)` (true if velocity changed)
+`boolean setVelocity(double vel = 0)` (true if velocity changed)
 
-`boolean setVelLimit(float velLim)` (true if limit changed)
+`boolean setVelLimit(double velLim)` (true if limit changed)
 
-`boolean setAccelLimit(float accelLim)` (true if limit changed)
+`boolean setAccelLimit(double accelLim)` (true if limit changed)
 
-`void setVelAccelLimits(float velLim, float accLim)`
+`void setVelAccelLimits(double velLim, double accLim)`
 
-`float getPosition()`
+`double getPosition()`
 
-`float getVelocity()`
+`double getVelocity()`
 
-`float getAcceleration()` _for debugging only._
-
-_**Velocity and/or acceleration limits can be set as INFINITY in order to have no limit.**_
+`double getAcceleration()` _for debugging only._
 
 
 ## Notes:
 
 During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid. (Also, note that if the acceleration limit is infinity, this value stays zero when position stops)
-
-[This sketch](https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0) made with [Processing](https://processing.org/) uses the same formula as I made for this library.
