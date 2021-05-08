@@ -46,6 +46,8 @@ _**Velocity and/or acceleration limits can be set as INFINITY in order to have n
 
 `double getAcceleration()` _for debugging only._
 
+`void resetTime()` If calc() hasn't been run for a while, use this before starting to use it again to protect from large jumps.
+
 
 ## Notes:
 
