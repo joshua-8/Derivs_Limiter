@@ -2,7 +2,7 @@
 
 https://github.com/joshua-8/Derivs_Limiter
 
-[![arduino-library-badge](https://www.ardu-badge.com/badge/Derivs_Limiter.svg?)](https://www.ardu-badge.com/Derivs_Limiter)
+[![arduino-library-badge](https://www.ardu-badge.com/badge/Derivs_Limiter.svg?)](https://www.ardu-badge.com/Derivs_Limiter) Also available for [platformio](https://platformio.org/lib/show/12113/Derivs_Limiter)
 
 [DETAILED DOCUMENTATION](https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html) (made with Doxygen)
 
