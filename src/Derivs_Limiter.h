@@ -3,7 +3,6 @@
 #include <Arduino.h>
 /**
  * @brief  This library can be used to limit the first and second derivative of a variable as it approaches a target value.
- * 
  * https://github.com/joshua-8/Derivs_Limiter
  */
 class Derivs_Limiter {
@@ -148,6 +147,13 @@ public:
     {
         target = _target;
         return _calc();
+    }
+    /**
+     * @brief If calc hasn't been run for a while, use this before starting to use it again to protect from large jumps.
+     */
+    void resetTime()
+    {
+        lastTime = micros();
     }
 
 private:
