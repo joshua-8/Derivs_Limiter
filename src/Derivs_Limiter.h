@@ -20,7 +20,7 @@ public:
      * @brief  constructor for Derivs_Limiter class
      * @param  velL: (double) velocity limit (units per second)
      * @param  accL: (double) acceleration limit (units per second per second)
-     * @param  target: (double) target value to make position approach
+     * @param  target: (double) target value to make position approach (default: 0)
      * @param  pos: (double) starting position (default: 0)
      * @param  vel: (double) starting velocity (default: 0)
      */
