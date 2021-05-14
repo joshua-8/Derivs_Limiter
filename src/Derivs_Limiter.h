@@ -14,6 +14,8 @@ private:
     double velLimit;
     double accelLimit;
     double target;
+    double lastPosition;
+    double time;
 
 public:
     /**
@@ -32,6 +34,8 @@ public:
         target = targ;
         position = pos;
         velocity = vel;
+        lastPosition = pos;
+        time = 0;
     }
     /**
      * @brief  set position and velocity
@@ -156,6 +160,24 @@ public:
         lastTime = micros();
     }
 
+    /**
+     * @brief  returns the time (in seconds) between the two most recent calculation times
+     * @retval  (double)
+     */
+    double getTimeInterval()
+    {
+        return time;
+    }
+
+    /**
+     * @brief  returns the change in position from the most recent run of calc()
+     * @retval  (double)
+     */
+    double getPosDelta()
+    {
+        return position - lastPosition;
+    }
+
 private:
     /**
      * @brief  this is where the actual code is
@@ -163,7 +185,8 @@ private:
      */
     double _calc()
     {
-        double time = (micros() - lastTime) / 1000000.0;
+        lastPosition = position;
+        time = (micros() - lastTime) / 1000000.0;
         if (time == 0) { //if it hasn't been a microsecond since last calculated
             return position;
         }

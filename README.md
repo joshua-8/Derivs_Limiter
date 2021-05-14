@@ -50,6 +50,9 @@ _**Velocity and/or acceleration limits can be set as INFINITY in order to have n
 
 `void resetTime()` If calc() hasn't been run for a while, use this before starting to use it again to protect from large jumps.
 
+`double getTimeInterval()`
+
+`double getPosDelta()` (how much did position just change?)
 
 ## Notes:
 

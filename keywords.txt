@@ -8,4 +8,6 @@ setVelAccelLimits 	KEYWORD2
 getVelocity 		KEYWORD2
 getAcceleration 	KEYWORD2
 getPosition 		KEYWORD2
+getPosDelta 		KEYWORD2
+getTime 		KEYWORD2
 calc 			KEYWORD2
