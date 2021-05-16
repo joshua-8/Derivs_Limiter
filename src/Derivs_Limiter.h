@@ -6,7 +6,7 @@
  * https://github.com/joshua-8/Derivs_Limiter
  */
 class Derivs_Limiter {
-private:
+protected:
     double position;
     double velocity;
     double accel;
@@ -16,6 +16,11 @@ private:
     double target;
     double lastPosition;
     double time;
+    /**
+     * @brief  true = immediately set velocity to zero if moving away from target, false = stay under accel limit
+     * @note  setting for preventing going away from the target at the cost of accelerating sharply to stop that
+     */
+    boolean preventGoingWrongWay;
 
 public:
     /**
@@ -25,8 +30,9 @@ public:
      * @param  target: (double) target value to make position approach (default: 0)
      * @param  pos: (double) starting position (default: 0)
      * @param  vel: (double) starting velocity (default: 0)
+     * @param  _preventGoingWrongWay: (bool) stop immediately if velocity is going away from target (default: true)
      */
-    Derivs_Limiter(double velL, double accL, double targ = 0, double pos = 0, double vel = 0)
+    Derivs_Limiter(double velL, double accL, double targ = 0, double pos = 0, double vel = 0, boolean _preventGoingWrongWay = true)
     {
         lastTime = 0;
         velLimit = abs(velL);
@@ -36,6 +42,7 @@ public:
         velocity = vel;
         lastPosition = pos;
         time = 0;
+        preventGoingWrongWay = _preventGoingWrongWay;
     }
 
     /**
@@ -237,7 +244,25 @@ public:
         return position - lastPosition;
     }
 
-private:
+    /**
+     * @brief  returns value of preventGoingWrongWay setting
+     * @retval (bool)
+     */
+    bool getPreventGoingWrongWay()
+    {
+        return preventGoingWrongWay;
+    }
+
+    /**
+     * @brief  sets value of preventGoingWrongWay, true = immediately set velocity to zero if moving away from target, false = stay under accel limit
+     * @param  _preventGoingWrongWay: (bool)
+     */
+    void setPreventGoingWrongWay(bool _preventGoingWrongWay)
+    {
+        preventGoingWrongWay = _preventGoingWrongWay;
+    }
+
+protected:
     /**
      * @brief  this is where the actual code is
      * @retval (double) position
@@ -264,7 +289,11 @@ private:
             position = target;
 
         } else {
-            if (abs(velocity) < velLimit || !((velocity > 0) == (target - position > 0))) { //if slower than max speed or going the wrong way
+            if (abs(velocity) < velLimit) { //slower than max speed
+                accel = constrain((target - position > 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //...accelerate towards target.
+            } else if (!((velocity > 0) == (target - position > 0))) { //going the wrong way
+                if (preventGoingWrongWay)
+                    velocity = 0;
                 accel = constrain((target - position > 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //...accelerate towards target.
             } else if (abs(velocity) > velLimit + accelLimit * time) { //if going too fast
                 accel = constrain((velocity < 0 ? accelLimit : -accelLimit), -velLimit / time, velLimit / time); //...slow down

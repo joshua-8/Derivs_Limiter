@@ -16,3 +16,5 @@ getTarget 			KEYWORD2
 getAccelLimit		KEYWORD2
 getVelLimit			KEYWORD2
 getLastTime			KEYWORD2
+getPreventGoingWrongWay		KEYWORD2
+setPreventGoingWrongWay		KEYWORD2

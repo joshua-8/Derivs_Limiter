@@ -11,7 +11,7 @@
 #include <Derivs_Limiter.h>
 //Velocity and/or acceleration limits can be set as INFINITY in order to have no limit.
 
-Derivs_Limiter limiter = Derivs_Limiter(100, 75, 0, 0, 0); //Derivs_Limiter(velocityLimit, accelLimit, targetPos=0, initialPos=0, initialVel=0)
+Derivs_Limiter limiter = Derivs_Limiter(100, 75, 0, 0, 0, true); //Derivs_Limiter(velocityLimit, accelLimit, targetPos=0, initialPos=0, initialVel=0, preventGoingWrongWay=true)
 
 void setup()
 {
@@ -24,11 +24,13 @@ void setup()
     limiter.getVelLimit();
     limiter.getAccelLimit();
     limiter.resetTime();
+    limiter.setPreventGoingWrongWay(true);
+    limiter.getPreventGoingWrongWay();
 }
 
 void loop()
 {
-    double target=10.0; //doubles are used as they may give more resolution than floats on some processors
+    double target = 10.0; //doubles are used as they may give more resolution than floats on some processors
     limiter.setTarget(target);
     limiter.getTarget();
     double smoothedPosition = limiter.calc(target);

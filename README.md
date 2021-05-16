@@ -62,6 +62,10 @@ _**Velocity and/or acceleration limits can be set as INFINITY in order to have n
 
 `double getPosDelta()` (how much did position just change?)
 
+`setPreventGoingWrongWay(bool preventGoingWrongWay)` true = immediately set velocity to zero if moving away from target, false = stay under accel limit
+
+`bool getPreventGoingWrongWay()`
+
 ## Notes:
 
 Acceleration is not guaranteed to be below the set limit if the target position is changed while position is changing. The priority is to stop in time even if extra acceleration is needed.
