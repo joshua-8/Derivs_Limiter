@@ -37,6 +37,7 @@ public:
         lastPosition = pos;
         time = 0;
     }
+
     /**
      * @brief  set position and velocity
      * @param  pos: (double) default: 0
@@ -47,6 +48,7 @@ public:
         position = pos;
         velocity = vel;
     }
+
     /**
      * @brief  set position
      * @param  pos: (double) default: 0
@@ -60,6 +62,7 @@ public:
         }
         return false;
     }
+
     /**
      * @brief  set velocity
      * @param  vel: (double) default: 0
@@ -73,6 +76,7 @@ public:
         }
         return false;
     }
+
     /**
      * @brief  set velocity limit
      * @param  velLim: (double) velocity limit (units per second)
@@ -86,6 +90,7 @@ public:
         }
         return false;
     }
+
     /**
      * @brief  set acceleration limit
      * @param  accelLim: (double) acceleration limit (units per second per second)
@@ -99,6 +104,7 @@ public:
         }
         return false;
     }
+
     /**
      * @brief  set velocity and acceleration limits
      * @param  velLim: (double) velocity limit
@@ -109,6 +115,7 @@ public:
         setVelLimit(velLim);
         setAccelLimit(accLim);
     }
+
     /**
      * @brief  get the current velocity
      * @retval (double) (units per second)
@@ -117,6 +124,7 @@ public:
     {
         return velocity;
     }
+
     /**
      * @brief  get the current acceleration
      * @note for debugging only, value noisy
@@ -126,6 +134,7 @@ public:
     {
         return accel;
     }
+
     /**
      * @brief  get the current position value, but doesn't calculate anything
      * @retval (double)
@@ -134,6 +143,7 @@ public:
     {
         return position;
     }
+
     /**
      * @brief  call this as frequently as possible to calculate all the values
      * @retval (double) position
@@ -142,6 +152,7 @@ public:
     {
         return _calc();
     }
+
     /**
      * @brief  call this as frequently as possible to calculate all the values
      * @param  _target: set the target position
@@ -152,6 +163,7 @@ public:
         target = _target;
         return _calc();
     }
+
     /**
      * @brief  set target position (doesn't run calculation, make sure to run calc() yourself)
      * @param  _target: (double) position
@@ -162,6 +174,7 @@ public:
         target = _target;
         return position == target;
     }
+
     /**
      * @brief  get target position
      * @retval  (double)
@@ -170,6 +183,7 @@ public:
     {
         return target;
     }
+
     /**
      * @brief If calc hasn't been run for a while, use this before starting to use it again to protect from large jumps.
      */
