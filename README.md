@@ -18,7 +18,7 @@ The formula in this program supports being run at uneven intervals, and allows f
 ### Create a Derivs_Limiter object:
 `Derivs_Limiter myLimiter = Derivs_Limiter(velocityLimit, accelLimit);`
 
-`Derivs_Limiter(velocityLimit, accelLimit, targetPos, initialPos, initialVel)`
+`Derivs_Limiter(velocityLimit, accelLimit, targetPos=0, initialPos=0, initialVel=0, preventGoingWrongWay=0)`
 
 _**Velocity and/or acceleration limits can be set as INFINITY in order to have no limit.**_
 
