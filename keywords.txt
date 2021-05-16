@@ -9,5 +9,6 @@ getVelocity 		KEYWORD2
 getAcceleration 	KEYWORD2
 getPosition 		KEYWORD2
 getPosDelta 		KEYWORD2
-getTimeInterval 		KEYWORD2
-calc 			KEYWORD2
+getTimeInterval		KEYWORD2
+calc 				KEYWORD2
+setTarget 			KEYWORD2

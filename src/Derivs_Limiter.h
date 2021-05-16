@@ -153,6 +153,16 @@ public:
         return _calc();
     }
     /**
+     * @brief  set target position (doesn't run calculation, make sure to run calc() yourself)
+     * @param  _target: (double) position
+     * @retval  (boolean) position==target
+     */
+    boolean setTarget(double _target)
+    {
+        target = _target;
+        return position == target;
+    }
+    /**
      * @brief If calc hasn't been run for a while, use this before starting to use it again to protect from large jumps.
      */
     void resetTime()
