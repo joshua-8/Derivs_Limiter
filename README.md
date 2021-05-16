@@ -44,6 +44,10 @@ _**Velocity and/or acceleration limits can be set as INFINITY in order to have n
 
 `bool setAccelLimit(double accelLim)` (true if limit changed)
 
+`double getVelLimit()`
+
+`double getAccelLimit()`
+
 `void setVelAccelLimits(double velLim, double accLim)`
 
 `double getPosition()`

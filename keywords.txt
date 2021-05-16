@@ -13,3 +13,6 @@ getTimeInterval		KEYWORD2
 calc 				KEYWORD2
 setTarget 			KEYWORD2
 getTarget 			KEYWORD2
+getAccelLimit		KEYWORD2
+getVelLimit			KEYWORD2
+getLastTime			KEYWORD2

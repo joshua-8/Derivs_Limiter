@@ -106,6 +106,24 @@ public:
     }
 
     /**
+     * @brief  get velocity limit setting
+     * @retval  (double)
+     */
+    double getVelLimit()
+    {
+        return velLimit;
+    }
+
+    /**
+     * @brief  get acceleration limit setting
+     * @retval  (double)
+     */
+    double getAccelLimit()
+    {
+        return accelLimit;
+    }
+
+    /**
      * @brief  set velocity and acceleration limits
      * @param  velLim: (double) velocity limit
      * @param  accLim: (double) acceleration limit
@@ -190,6 +208,15 @@ public:
     void resetTime()
     {
         lastTime = micros();
+    }
+
+    /**
+     * @brief  returns the value of micros() when calc() last ran
+     * @retval  unsigned long
+     */
+    unsigned long getLastTime()
+    {
+        return lastTime;
     }
 
     /**
