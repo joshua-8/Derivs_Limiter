@@ -30,17 +30,19 @@ _**Velocity and/or acceleration limits can be set as INFINITY in order to have n
 
 ### Settings and other methods:
 
-`boolean setTarget(double _target)` (true if target reached)
+`bool setTarget(double _target)` (true if target reached)
+
+`double getTarget()`
 
 `void setPositionVelocity(double pos = 0, double vel = 0)`
 
-`boolean setPosition(double pos = 0)` (true if position changed)
+`bool setPosition(double pos = 0)` (true if position changed)
 
-`boolean setVelocity(double vel = 0)` (true if velocity changed)
+`bool setVelocity(double vel = 0)` (true if velocity changed)
 
-`boolean setVelLimit(double velLim)` (true if limit changed)
+`bool setVelLimit(double velLim)` (true if limit changed)
 
-`boolean setAccelLimit(double accelLim)` (true if limit changed)
+`bool setAccelLimit(double accelLim)` (true if limit changed)
 
 `void setVelAccelLimits(double velLim, double accLim)`
 

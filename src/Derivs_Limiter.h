@@ -50,9 +50,9 @@ public:
     /**
      * @brief  set position
      * @param  pos: (double) default: 0
-     * @retval (boolean) true if position changed
+     * @retval (bool) true if position changed
      */
-    boolean setPosition(double pos = 0)
+    bool setPosition(double pos = 0)
     {
         if (pos != position) {
             position = pos;
@@ -63,9 +63,9 @@ public:
     /**
      * @brief  set velocity
      * @param  vel: (double) default: 0
-     * @retval (boolean) true if velocity changed
+     * @retval (bool) true if velocity changed
      */
-    boolean setVelocity(double vel = 0)
+    bool setVelocity(double vel = 0)
     {
         if (vel != velocity) {
             velocity = vel;
@@ -76,9 +76,9 @@ public:
     /**
      * @brief  set velocity limit
      * @param  velLim: (double) velocity limit (units per second)
-     * @retval (boolean) true if limit changed
+     * @retval (bool) true if limit changed
      */
-    boolean setVelLimit(double velLim)
+    bool setVelLimit(double velLim)
     {
         if (velLim != velLimit) {
             velLimit = abs(velLim);
@@ -89,9 +89,9 @@ public:
     /**
      * @brief  set acceleration limit
      * @param  accelLim: (double) acceleration limit (units per second per second)
-     * @retval (boolean) true if limit changed
+     * @retval (bool) true if limit changed
      */
-    boolean setAccelLimit(double accelLim)
+    bool setAccelLimit(double accelLim)
     {
         if (accelLim != accelLimit) {
             accelLimit = abs(accelLim);
@@ -155,12 +155,16 @@ public:
     /**
      * @brief  set target position (doesn't run calculation, make sure to run calc() yourself)
      * @param  _target: (double) position
-     * @retval  (boolean) position==target
+     * @retval  (bool) position==target
      */
-    boolean setTarget(double _target)
+    bool setTarget(double _target)
     {
         target = _target;
         return position == target;
+    }
+    double getTarget()
+    {
+        return target;
     }
     /**
      * @brief If calc hasn't been run for a while, use this before starting to use it again to protect from large jumps.
