@@ -162,6 +162,10 @@ public:
         target = _target;
         return position == target;
     }
+    /**
+     * @brief  get target position
+     * @retval  (double)
+     */
     double getTarget()
     {
         return target;
