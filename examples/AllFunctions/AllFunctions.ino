@@ -40,4 +40,7 @@ void loop()
     limiter.getPosDelta();
     limiter.getAcceleration();
     limiter.getTimeInterval();
+    limiter.isPosAtTarget();
+    limiter.isPosNotAtTarget();
+    limiter.distToTarget();
 }

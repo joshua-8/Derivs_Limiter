@@ -66,6 +66,12 @@ _**Velocity and/or acceleration limits can be set as INFINITY in order to have n
 
 `bool getPreventGoingWrongWay()`
 
+`bool isPosAtTarget()`
+
+`bool isPosNotAtTarget()`
+
+`double distToTarget()`
+
 ## Notes:
 
 Acceleration is not guaranteed to be below the set limit if the target position is changed while position is changing. The priority is to stop in time even if extra acceleration is needed.

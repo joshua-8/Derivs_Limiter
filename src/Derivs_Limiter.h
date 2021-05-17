@@ -262,6 +262,34 @@ public:
         preventGoingWrongWay = _preventGoingWrongWay;
     }
 
+    /**
+     * @brief  does position equal target?
+     * @retval  (bool)
+     */
+    bool isPosAtTarget()
+    {
+        return position == target;
+    }
+
+    /**
+     * @brief  is position not equal to target?
+     * @retval  (bool)
+     */
+    bool isPosNotAtTarget()
+    {
+        return position != target;
+    }
+
+    /**
+     * @brief  returns position - target
+     * @note use abs(distToTarget()) if you don't care about direction
+     * @retval (double)
+     */
+    double distToTarget()
+    {
+        return position - target;
+    }
+
 protected:
     /**
      * @brief  this is where the actual code is

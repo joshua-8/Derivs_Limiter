@@ -18,3 +18,6 @@ getVelLimit			KEYWORD2
 getLastTime			KEYWORD2
 getPreventGoingWrongWay		KEYWORD2
 setPreventGoingWrongWay		KEYWORD2
+isPosAtTarget		KEYWORD2
+isPosNotAtTarget	KEYWORD2
+distToTarget	KEYWORD2
