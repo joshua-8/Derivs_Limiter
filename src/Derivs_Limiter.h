@@ -22,6 +22,8 @@ protected:
     float maxStoppingAccel;
     float lastTarget;
     float targetDelta;
+    float lastPos;
+    float posDelta;
     float* positionPointer;
     float* velocityPointer;
 
@@ -39,6 +41,8 @@ public:
         lastTarget = _target;
         targetDelta = 0;
         position = _startPos;
+        lastPos = position;
+        posDelta = 0;
         velocity = _startVel;
         time = 0;
         preventGoingWrongWay = _preventGoingWrongWay;
@@ -335,6 +339,24 @@ public:
     }
 
     /**
+     * @brief  returns the change in position from the most recent run of calc()
+     * @retval  (float)
+     */
+    float getPositionDelta()
+    {
+        return posDelta;
+    }
+
+    /**
+     * @brief  what was position in the most recent run of calc(), can be used to see if position was changed outside of calc()
+     * @retval  (float)
+     */
+    float getLastPosition()
+    {
+        return lastPos;
+    }
+
+    /**
      * @brief  how fast was target changing (distance/time)
      * @note   returns 0 if time is 0
      * @retval (float)
@@ -500,6 +522,9 @@ protected:
             *positionPointer = position;
         if (velocityPointer)
             *velocityPointer = velocity;
+
+        posDelta = position - lastPos;
+        lastPos = position;
 
         return position;
     }

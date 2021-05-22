@@ -55,6 +55,8 @@ void loop()
     limiter.getTimeInterval();
     limiter.getTargetDelta();
     limiter.getLastTarget();
+    limiter.getPositionDelta();
+    limiter.getLastPosition();
     limiter.getTargetVelocity();
     float vel;
     limiter.setVelocityPointer(&vel);

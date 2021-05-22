@@ -77,6 +77,10 @@ _**Velocity, position and/or acceleration limits can be set as INFINITY in order
   `  float getTargetDelta()`  
 
   `  float getLastTarget()`  
+  
+  `  float getPositionDelta()`
+
+  `  float getLastPosition()`
 
   `  float getTargetVelocity()`  
 
