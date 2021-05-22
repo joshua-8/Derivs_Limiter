@@ -82,7 +82,7 @@ _**Velocity, position and/or acceleration limits can be set as INFINITY in order
 
   `  float getLastPosition()`
 
-  `  float getTargetVelocity()`  
+  `  float getTargetDeltaPerTime()`  
 
   `  void setPositionPointer(float* _positionPointer)`  
 

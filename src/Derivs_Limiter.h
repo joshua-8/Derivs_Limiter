@@ -361,7 +361,7 @@ public:
      * @note   returns 0 if time is 0
      * @retval (float)
      */
-    float getTargetVelocity()
+    float getTargetDeltaPerTime()
     {
         if (time > 0)
             return targetDelta / time;
@@ -416,7 +416,7 @@ public:
     }
 
     /**
-     * @brief  sets value of preventGoingWrongWay, true = immediately set velocity to zero if moving away from target, false = stay under accel limit
+     * @brief  sets value of preventGoingTooFast, true = constrain velocity to velLimit, false decelerate at accelLimit to velLimit
      * @param  _preventGoingTooFast: (bool)
      */
     void setPreventGoingTooFast(bool _preventGoingTooFast)
