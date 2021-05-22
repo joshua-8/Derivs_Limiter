@@ -21,13 +21,14 @@ protected:
     float posLimitHigh;
     float maxStoppingAccel;
     float lastTarget;
+    float targetDelta;
     float* positionPointer;
     float* velocityPointer;
 
 public:
     Derivs_Limiter(float _velLimit, float _accelLimit, float _target = 0,
         float _startPos = 0, float _startVel = 0, bool _preventGoingWrongWay = true, bool _preventGoingTooFast = true,
-        float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingAccel = 10.0,
+        float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingAccel = INFINITY,
         float* _posPointer = NULL, float* _velPointer = NULL)
     {
         accel = 0;
@@ -36,6 +37,7 @@ public:
         accelLimit = abs(_accelLimit);
         target = _target;
         lastTarget = _target;
+        targetDelta = 0;
         position = _startPos;
         velocity = _startVel;
         time = 0;
@@ -43,7 +45,7 @@ public:
         preventGoingTooFast = _preventGoingTooFast;
         posLimitLow = _posLimitLow;
         posLimitHigh = max(_posLimitHigh, posLimitLow);
-        maxStoppingAccel = max(_maxStoppingAccel, 1.0);
+        maxStoppingAccel = max(_maxStoppingAccel, (float)1.0);
         positionPointer = _posPointer;
         velocityPointer = _velPointer;
     }
@@ -173,6 +175,82 @@ public:
     }
 
     /**
+     * @brief  set setting for how many times accelLimit can be used to stop in time for target position
+     * @param  _maxStoppingAccel: (float) default=INFINITY, must be >=1.0
+     */
+    void setMaxStoppingAccel(float _maxStoppingAccel = INFINITY)
+    {
+        maxStoppingAccel = max(_maxStoppingAccel, (float)1.0);
+    }
+
+    /**
+     * @brief  get setting for how many times accelLimit can be used to stop in time for target position
+     * @retval (float)
+     */
+    float getMaxStoppingAccel()
+    {
+        return maxStoppingAccel;
+    }
+
+    /**
+     * @brief  get the lower boundary for position
+     * @retval (float)
+     */
+    float getLowPosLimit()
+    {
+        return posLimitLow;
+    }
+
+    /**
+     * @brief  get the higher boundary for position
+     * @retval (float)
+     */
+    float getHighPosLimit()
+    {
+        return posLimitHigh;
+    }
+
+    /**
+     * @brief  set the lower boundary for position
+     * @param  lowLimit: (float), -INFINITY means no limit
+     * @retval (bool) did position change
+     */
+    bool setLowPosLimit(float lowLimit)
+    {
+        if (lowLimit != posLimitLow) {
+            posLimitLow = lowLimit;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @brief  set the higher boundary for position
+     * @note   limit set to posLimitLow if below posLimitLow
+     * @param  highLimit: (float), INFINITY means no limit
+     * @retval (bool) did position change
+     */
+    bool setHighPosLimit(float highLimit)
+    {
+        if (max(highLimit, posLimitLow) != posLimitHigh) {
+            posLimitHigh = max(highLimit, posLimitLow);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @brief  set the boundaries for position
+     * @param  lowLimit: (float)
+     * @param  highLimit: (float)
+     */
+    void setPosLimits(float lowLimit, float highLimit)
+    {
+        setLowPosLimit(lowLimit);
+        setHighPosLimit(highLimit);
+    }
+
+    /**
      * @brief  call this as frequently as possible to calculate all the values
      * @retval (float) position
      */
@@ -244,7 +322,48 @@ public:
      */
     float getTargetDelta()
     {
-        return target - lastTarget;
+        return targetDelta;
+    }
+
+    /**
+     * @brief  what was target in the most recent run of calc()
+     * @retval  (float)
+     */
+    float getLastTarget()
+    {
+        return lastTarget;
+    }
+
+    /**
+     * @brief  how fast was target changing (distance/time)
+     * @note   returns 0 if time is 0
+     * @retval (float)
+     */
+    float getTargetVelocity()
+    {
+        if (time > 0)
+            return targetDelta / time;
+        return 0;
+    }
+
+    /**
+     * @brief  set pointer to an external variable that will be read and modified during calc as position
+     * @note   set to NULL to not use, set to variable with setPositionPointer(&variable)
+     * @param  _positionPointer: (float*)
+     */
+    void setPositionPointer(float* _positionPointer)
+    {
+        positionPointer = _positionPointer;
+    }
+
+    /**
+     * @brief  set pointer to an external variable that will be read and modified during calc as velocity
+     * @note   set to NULL to not use,  set to variable with setVelocityPointer(&variable)
+     * @param  _velocityPointer: (float*)
+     */
+    void setVelocityPointer(float* _velocityPointer)
+    {
+        velocityPointer = _velocityPointer;
     }
 
     /**
@@ -317,7 +436,7 @@ protected:
      * @retval (float) position
      */
 
-    float _calc()
+    virtual float _calc()
     {
         if (positionPointer)
             position = *positionPointer;
@@ -343,6 +462,7 @@ protected:
             velocity = 0;
         }
         target = constrain(target, posLimitLow, posLimitHigh);
+        targetDelta = target - lastTarget;
         lastTarget = target;
         if (preventGoingTooFast)
             velocity = constrain(velocity, -velLimit, velLimit);
@@ -353,11 +473,11 @@ protected:
             position = target;
         } else { //need to move
             float maxAccelA = min(accelLimit, velLimit / time);
-            accel = (((target - position) > 0 ? velLimit : -velLimit) - velocity) / time;
+            accel = (((target - position) > 0 ? velLimit : -velLimit) - velocity) / time; //acceleration to reach target vel
             accel = constrain(accel, -maxAccelA, maxAccelA);
             if (velocity == 0 || (velocity > 0) == (target - position > 0)) { //going towards target
                 float maxAccelB = abs((target - position) / time / time);
-                accel = constrain(accel, -maxAccelB, maxAccelB);
+                accel = constrain(accel, -maxAccelB, maxAccelB); //don't overshoot
             }
 
             if (preventGoingWrongWay && velocity != 0 && (velocity > 0) != (target - position > 0)) //going the wrong way

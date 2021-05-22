@@ -6,6 +6,8 @@ https://github.com/joshua-8/Derivs_Limiter
 
 [DETAILED DOCUMENTATION](https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html) (made with Doxygen)
 
+https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0
+
 This library can be used to limit the first and second derivative of a variable as it approaches a target value.
 
 It's easiest to think of in terms of position, velocity, and acceleration. 
@@ -18,64 +20,89 @@ The formula in this program supports being run at uneven intervals, and allows f
 ### Create a Derivs_Limiter object:
 `Derivs_Limiter myLimiter = Derivs_Limiter(velocityLimit, accelLimit);`
 
-`Derivs_Limiter(velocityLimit, accelLimit, targetPos=0, initialPos=0, initialVel=0, preventGoingWrongWay=true)`
+`Derivs_Limiter(float _velLimit, float _accelLimit, float _target = 0, float _startPos = 0, float _startVel = 0, bool _preventGoingWrongWay = true, bool _preventGoingTooFast = true, float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingAccel = INFINITY, float* _posPointer = NULL, float* _velPointer = NULL)`
 
-_**Velocity and/or acceleration limits can be set as INFINITY in order to have no limit.**_
+_**Velocity, position and/or acceleration limits can be set as INFINITY in order to have no limit.**_
 
-### Use:
+### quick reference: ([more detailed reference available here](https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html) )
 
-`smoothedPosition = myLimiter.calc()`
+  `  float calc()`  
 
-`smoothedPosition = myLimiter.calc(targetPos)`
+  `  float calc(float _target)`  
 
-### Settings and other methods:
+  `  bool setTarget(float _target)`  
 
-`bool setTarget(float _target)` (true if target reached)
+  `  float getTarget()`  
 
-`float getTarget()`
+  `  float getPosition()`  
 
-`void setPositionVelocity(float pos = 0, float vel = 0)`
+  `  float getVelocity()`  
 
-`bool setPosition(float pos = 0)` (true if position changed)
+  `  float getAcceleration()`
 
-`bool setVelocity(float vel = 0)` (true if velocity changed)
+  `  void setPositionVelocity(float pos = 0, float vel = 0)`  
 
-`bool setVelLimit(float velLim)` (true if limit changed)
+  `  bool setPosition(float pos = 0)`  
 
-`bool setAccelLimit(float accelLim)` (true if limit changed)
+  `  bool setVelocity(float vel = 0)`  
 
-`float getVelLimit()`
+  `  bool setVelLimit(float velLim)`  
 
-`float getAccelLimit()`
+  `  bool setAccelLimit(float accelLim)`  
 
-`void setVelAccelLimits(float velLim, float accLim)`
+  `  float getVelLimit()`  
 
-`float getPosition()`
+  `  float getAccelLimit()`  
 
-`float getVelocity()`
+  `  void setVelAccelLimits(float velLim, float accLim)`    
 
-`float getAcceleration()` _for debugging only._
+  `  void setMaxStoppingAccel(float _maxStoppingAccel = INFINITY)`  
 
-`void resetTime()` If calc() hasn't been run for a while, use this before starting to use it again to protect from large jumps.
+  `  float getMaxStoppingAccel()`  
 
-`float getTimeInterval()`
+  `  float getLowPosLimit()`  
 
-`float getPosDelta()` (how much did position just change?)
+  `  float getHighPosLimit()`  
 
-`setPreventGoingWrongWay(bool preventGoingWrongWay)` true = immediately set velocity to zero if moving away from target, false = stay under accel limit
+  `  bool setLowPosLimit(float lowLimit)`  
 
-`bool getPreventGoingWrongWay()`
+  `  bool setHighPosLimit(float highLimit)`  
 
-`bool isPosAtTarget()`
+  `  void setPosLimits(float lowLimit, float highLimit)`  
 
-`bool isPosNotAtTarget()`
+  `  void resetTime()`  
 
-`float distToTarget()`
+  `  unsigned long getLastTime()`  
+
+  `  float getTimeInterval()`  
+
+  `  float getTargetDelta()`  
+
+  `  float getLastTarget()`  
+
+  `  float getTargetVelocity()`  
+
+  `  void setPositionPointer(float* _positionPointer)`  
+
+  `  void setVelocityPointer(float* _velocityPointer)`  
+
+  `  bool getPreventGoingWrongWay()`  
+
+  `  void setPreventGoingWrongWay(bool _preventGoingWrongWay)`  
+
+  `  bool getPreventGoingTooFast()`  
+
+  `  void setPreventGoingTooFast(bool _preventGoingTooFast)`  
+
+  `  bool isPosAtTarget()`  
+
+  `  bool isPosNotAtTarget()`  
+
+  `  float distToTarget()`  
+ 
 
 ## Notes:
 
-Acceleration is not guaranteed to be below the set limit if the target position is changed while position is changing. The priority is to stop in time even if extra acceleration is needed.
-
 During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid. (Also, note that if the acceleration limit is infinity, this value stays zero when position stops)
 
-The type `float` is the same as a float on standard Arduinos, but can provide increased precision on some more powerful processors. 
+[here](https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0) is a Processing sketch that I used to test the equations I wrote for this library.

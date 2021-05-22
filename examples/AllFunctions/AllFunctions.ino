@@ -11,7 +11,8 @@
 #include <Derivs_Limiter.h>
 //Velocity and/or acceleration limits can be set as INFINITY in order to have no limit.
 
-Derivs_Limiter limiter = Derivs_Limiter(100, 75, 0, 0, 0, true); //Derivs_Limiter(velocityLimit, accelLimit, targetPos=0, initialPos=0, initialVel=0, preventGoingWrongWay=true)
+//                       Derivs_Limiter(float _velLimit, float _accelLimit, float _target = 0, float _startPos = 0, float _startVel = 0, bool _preventGoingWrongWay = true, bool _preventGoingTooFast = true, float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingAccel = INFINITY, float* _posPointer = NULL, float* _velPointer = NULL)
+Derivs_Limiter limiter = Derivs_Limiter(100, 75, 0, 0, 0, true, true, -INFINITY, INFINITY, INFINITY, NULL, NULL);
 
 void setup()
 {
@@ -26,21 +27,37 @@ void setup()
     limiter.resetTime();
     limiter.setPreventGoingWrongWay(true);
     limiter.getPreventGoingWrongWay();
+    limiter.setPreventGoingTooFast(true);
+    limiter.getPreventGoingTooFast();
+    limiter.setMaxStoppingAccel(INFINITY);
+    limiter.getMaxStoppingAccel();
+    limiter.getLowPosLimit();
+    limiter.getHighPosLimit();
+    limiter.setLowPosLimit(-INFINITY);
+    limiter.setHighPosLimit(INFINITY);
+    limiter.setPosLimits(-1, 1);
 }
 
 void loop()
 {
-    float target = 10.0; //floats are used as they may give more resolution than floats on some processors
+    float target = 10.0;
     limiter.setTarget(target);
     limiter.getTarget();
     float smoothedPosition = limiter.calc(target);
     smoothedPosition = limiter.calc();
     limiter.getPosition();
     limiter.getVelocity();
-    limiter.getPosDelta();
     limiter.getAcceleration();
-    limiter.getTimeInterval();
     limiter.isPosAtTarget();
     limiter.isPosNotAtTarget();
     limiter.distToTarget();
+    limiter.getLastTime();
+    limiter.getTimeInterval();
+    limiter.getTargetDelta();
+    limiter.getLastTarget();
+    limiter.getTargetVelocity();
+    float vel;
+    limiter.setVelocityPointer(&vel);
+    float pos;
+    limiter.setPositionPointer(&pos);
 }
