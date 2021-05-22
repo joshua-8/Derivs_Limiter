@@ -105,4 +105,4 @@ _**Velocity, position and/or acceleration limits can be set as INFINITY in order
 
 During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid. (Also, note that if the acceleration limit is infinity, this value stays zero when position stops)
 
-[here](https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0) is a Processing sketch that I used to test the equations I wrote for this library.
+[Here](https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0) is a Processing sketch that I used to test the formula I wrote for this library.
