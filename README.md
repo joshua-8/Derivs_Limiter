@@ -6,8 +6,6 @@ https://github.com/joshua-8/Derivs_Limiter
 
 [DETAILED DOCUMENTATION](https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html) (made with Doxygen)
 
-https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0
-
 This library can be used to limit the first and second derivative of a variable as it approaches a target value.
 
 It's easiest to think of in terms of position, velocity, and acceleration. 
