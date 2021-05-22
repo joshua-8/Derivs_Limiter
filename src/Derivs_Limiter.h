@@ -486,10 +486,14 @@ protected:
         target = constrain(target, posLimitLow, posLimitHigh);
         targetDelta = target - lastTarget;
         lastTarget = target;
+
+        if (preventGoingWrongWay && velocity != 0 && target != position && ((velocity > 0) != (target - position > 0))) //going the wrong way
+            velocity = 0;
+
         if (preventGoingTooFast)
             velocity = constrain(velocity, -velLimit, velLimit);
 
-        if ((target == position && velocity == 0) || (abs(target - position) <= abs(velocity * time) && (abs(velocity) < accelLimit * time * maxStoppingAccel))) { //basically there
+        if ((target == position && velocity == 0) || ((velocity != 0 && target != position && (velocity > 0) == (target - position > 0)) && abs(target - position) <= abs(velocity * time) && (abs(velocity) < accelLimit * time * maxStoppingAccel))) { //basically there
             accel = 0;
             velocity = 0;
             position = target;
@@ -502,10 +506,7 @@ protected:
                 accel = constrain(accel, -maxAccelB, maxAccelB); //don't overshoot
             }
 
-            if (preventGoingWrongWay && velocity != 0 && (velocity > 0) != (target - position > 0)) //going the wrong way
-                velocity = 0;
-
-            if (velocity != 0 && (velocity > 0) == (target - position > 0)) { //going towards target
+            if (velocity != 0 && target != position && ((velocity > 0) == (target - position > 0))) { //going towards target
                 float stoppingDistance = sq(velocity) / 2 / accelLimit;
                 if (abs(target - position) <= stoppingDistance) { //time to start slowing down
                     accel = -sq(velocity) / 2 / (target - position);
@@ -525,7 +526,7 @@ protected:
 
         posDelta = position - lastPos;
         lastPos = position;
-
+        
         return position;
     }
 };
