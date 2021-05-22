@@ -30,10 +30,10 @@ void setup()
 
 void loop()
 {
-    double target = 10.0; //doubles are used as they may give more resolution than floats on some processors
+    float target = 10.0; //floats are used as they may give more resolution than floats on some processors
     limiter.setTarget(target);
     limiter.getTarget();
-    double smoothedPosition = limiter.calc(target);
+    float smoothedPosition = limiter.calc(target);
     smoothedPosition = limiter.calc();
     limiter.getPosition();
     limiter.getVelocity();

@@ -30,37 +30,37 @@ _**Velocity and/or acceleration limits can be set as INFINITY in order to have n
 
 ### Settings and other methods:
 
-`bool setTarget(double _target)` (true if target reached)
+`bool setTarget(float _target)` (true if target reached)
 
-`double getTarget()`
+`float getTarget()`
 
-`void setPositionVelocity(double pos = 0, double vel = 0)`
+`void setPositionVelocity(float pos = 0, float vel = 0)`
 
-`bool setPosition(double pos = 0)` (true if position changed)
+`bool setPosition(float pos = 0)` (true if position changed)
 
-`bool setVelocity(double vel = 0)` (true if velocity changed)
+`bool setVelocity(float vel = 0)` (true if velocity changed)
 
-`bool setVelLimit(double velLim)` (true if limit changed)
+`bool setVelLimit(float velLim)` (true if limit changed)
 
-`bool setAccelLimit(double accelLim)` (true if limit changed)
+`bool setAccelLimit(float accelLim)` (true if limit changed)
 
-`double getVelLimit()`
+`float getVelLimit()`
 
-`double getAccelLimit()`
+`float getAccelLimit()`
 
-`void setVelAccelLimits(double velLim, double accLim)`
+`void setVelAccelLimits(float velLim, float accLim)`
 
-`double getPosition()`
+`float getPosition()`
 
-`double getVelocity()`
+`float getVelocity()`
 
-`double getAcceleration()` _for debugging only._
+`float getAcceleration()` _for debugging only._
 
 `void resetTime()` If calc() hasn't been run for a while, use this before starting to use it again to protect from large jumps.
 
-`double getTimeInterval()`
+`float getTimeInterval()`
 
-`double getPosDelta()` (how much did position just change?)
+`float getPosDelta()` (how much did position just change?)
 
 `setPreventGoingWrongWay(bool preventGoingWrongWay)` true = immediately set velocity to zero if moving away from target, false = stay under accel limit
 
@@ -70,7 +70,7 @@ _**Velocity and/or acceleration limits can be set as INFINITY in order to have n
 
 `bool isPosNotAtTarget()`
 
-`double distToTarget()`
+`float distToTarget()`
 
 ## Notes:
 
@@ -78,4 +78,4 @@ Acceleration is not guaranteed to be below the set limit if the target position 
 
 During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid. (Also, note that if the acceleration limit is infinity, this value stays zero when position stops)
 
-The type `double` is the same as a float on standard Arduinos, but can provide increased precision on some more powerful processors. 
+The type `float` is the same as a float on standard Arduinos, but can provide increased precision on some more powerful processors. 
