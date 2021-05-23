@@ -28,6 +28,21 @@ protected:
     float* velocityPointer;
 
 public:
+    /**
+     * @brief  constructor for Derivs_Limiter class
+     * @param  _velLimit: (float) velocity limit (units per second)
+     * @param  _accelLimit: (float) acceleration limit (units per second per second)
+     * @param  _target: (float) default=0, target value to make position approach
+     * @param  _startPos: (float) default=0, starting position
+     * @param  _startVel: (float) default=0, starting velocity
+     * @param  _preventGoingWrongWay: (bool) default=true, stop immediately if velocity is going away from target (default: true)
+     * @param  _preventGoingTooFast: (bool) default=true, constrain velocity to below velLimit
+     * @param  _posLimitLow: (float) default=-INFINITY, lower bound for position
+     * @param  _posLimitHigh: (float) default=INFINITY, upper bound for position
+     * @param  _maxStoppingAccel: (float) default=INFINITY, how many times accelLimit can be used to stop in time for target position
+     * @param  _posPointer: set pointer to an external variable that will be read and modified during calc as position use &var
+     * @param  _velPointer: set pointer to an external variable that will be read and modified during calc as velocity  use &var
+     */
     Derivs_Limiter(float _velLimit, float _accelLimit, float _target = 0,
         float _startPos = 0, float _startVel = 0, bool _preventGoingWrongWay = true, bool _preventGoingTooFast = true,
         float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingAccel = INFINITY,
@@ -457,7 +472,6 @@ protected:
      * @brief  this is where the actual code is
      * @retval (float) position
      */
-
     virtual float _calc()
     {
         if (positionPointer)
@@ -493,7 +507,7 @@ protected:
         if (preventGoingTooFast)
             velocity = constrain(velocity, -velLimit, velLimit);
 
-        if ((target == position && velocity == 0) || ((velocity != 0 && target != position && (velocity > 0) == (target - position > 0)) && abs(target - position) <= abs(velocity * time) && (abs(velocity) < accelLimit * time * maxStoppingAccel))) { //basically there
+        if ((target == position && (preventGoingWrongWay || velocity == 0)) || ((velocity != 0 && target != position && (velocity > 0) == (target - position > 0)) && abs(target - position) <= abs(velocity * time) && (abs(velocity) < accelLimit * time * maxStoppingAccel))) { //basically there
             accel = 0;
             velocity = 0;
             position = target;
@@ -526,7 +540,7 @@ protected:
 
         posDelta = position - lastPos;
         lastPos = position;
-        
+
         return position;
     }
 };
