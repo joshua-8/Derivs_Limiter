@@ -52,13 +52,18 @@ public:
         lastTime = 0;
         velLimit = abs(_velLimit);
         accelLimit = abs(_accelLimit);
-        target = _target;
+        target = 0;
+        if (!isnan(_target))
+            target = _target;
         lastTarget = _target;
         targetDelta = 0;
-        position = _startPos;
+        position = 0;
+        if (!isnan(_startPos))
+            position = _startPos;
         lastPos = position;
         posDelta = 0;
-        velocity = _startVel;
+        if (!isnan(_startVel))
+            velocity = _startVel;
         time = 0;
         preventGoingWrongWay = _preventGoingWrongWay;
         preventGoingTooFast = _preventGoingTooFast;
@@ -76,8 +81,10 @@ public:
      */
     void setPositionVelocity(float pos = 0, float vel = 0)
     {
-        position = pos;
-        velocity = vel;
+        if (!isnan(pos))
+            position = pos;
+        if (!isnan(vel))
+            velocity = vel;
     }
 
     /**
@@ -88,7 +95,8 @@ public:
     bool setPosition(float pos = 0)
     {
         if (pos != position) {
-            position = pos;
+            if (!isnan(pos))
+                position = pos;
             return true;
         }
         return false;
@@ -102,7 +110,8 @@ public:
     bool setVelocity(float vel = 0)
     {
         if (vel != velocity) {
-            velocity = vel;
+            if (!isnan(vel))
+                velocity = vel;
             return true;
         }
         return false;
@@ -285,7 +294,8 @@ public:
      */
     float calc(float _target)
     {
-        target = _target;
+        if (!isnan(_target))
+            target = _target;
         return _calc();
     }
 
@@ -296,7 +306,8 @@ public:
      */
     bool setTarget(float _target)
     {
-        target = _target;
+        if (!isnan(_target))
+            target = _target;
         return position == target;
     }
 
@@ -474,10 +485,10 @@ protected:
      */
     virtual float _calc()
     {
-        if (positionPointer)
+        if (positionPointer && !isnan(*positionPointer))
             position = *positionPointer;
 
-        if (velocityPointer)
+        if (velocityPointer && !isnan(*velocityPointer))
             velocity = *velocityPointer;
 
         time = (micros() - lastTime) / 1000000.0;

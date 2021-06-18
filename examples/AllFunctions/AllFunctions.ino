@@ -62,4 +62,5 @@ void loop()
     limiter.setVelocityPointer(&vel);
     float pos;
     limiter.setPositionPointer(&pos);
+    limiter.setPosition(NAN); //has no effect
 }
