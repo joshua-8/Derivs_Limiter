@@ -469,13 +469,13 @@ public:
     }
 
     /**
-     * @brief  returns position - target
+     * @brief  returns target - position
      * @note use abs(distToTarget()) if you don't care about direction
      * @retval (float)
      */
     float distToTarget()
     {
-        return position - target;
+        return target - position;
     }
 
 protected:
