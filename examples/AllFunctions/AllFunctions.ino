@@ -3,7 +3,7 @@
  *  https://github.com/joshua-8/Derivs_Limiter
  * 
  *  This example shows every function that the library has, 
- *  while it should compile it doesn't really do anything.
+ *  while it should compile, it is not meant to actually be run
  * 
  *  A more proper reference is here: https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html
  */
@@ -62,5 +62,8 @@ void loop()
     limiter.setVelocityPointer(&vel);
     float pos;
     limiter.setPositionPointer(&pos);
-    limiter.setPosition(NAN); //has no effect
+    limiter.setPosition(NAN); //has no effect because NAN
+    limiter.setVelLimitForTimedMove(180, 10, 100); //dist, time, maxVel
+    limiter.setTargetAndVelLimitForTimedMove(180, 10, 100); //target, time, maxVel
+    limiter.resetVelLimitToOriginal();
 }

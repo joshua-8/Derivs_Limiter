@@ -11,6 +11,8 @@ This library can be used to limit the first and second derivative of a variable 
 It's easiest to think of in terms of position, velocity, and acceleration. 
 If used with a servo, for example, the servo will smoothly move to a target value with a trapezoidal velocity profile.
 
+You can also specify how long you want a move to take and the library can calculate the velocity needed to make that happen.
+
 The formula in this program supports being run at uneven intervals, and allows for editing the target, position, and velocity while it runs since it doesn't rely on calculating a motion profile ahead of time.
 
 ## Usage:
@@ -101,7 +103,13 @@ _**Velocity, position and/or acceleration limits can be set as INFINITY in order
   `  bool isPosNotAtTarget()`  
 
   `  float distToTarget()`  
- 
+
+  `  void resetVelLimitToOriginal()`
+
+  `  boolean setVelLimitForTimedMove(float _dist, float _time, float _maxVel = NAN)`
+
+  `  boolean setTargetAndVelLimitForTimedMove(float _target, float _time, float _maxVel = NAN)`
+
 
 ## Notes:
 

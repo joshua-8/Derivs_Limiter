@@ -24,6 +24,7 @@ protected:
     float targetDelta;
     float lastPos;
     float posDelta;
+    float originalVelLimit;
     float* positionPointer;
     float* velocityPointer;
 
@@ -51,6 +52,7 @@ public:
         accel = 0;
         lastTime = 0;
         velLimit = abs(_velLimit);
+        originalVelLimit = velLimit;
         accelLimit = abs(_accelLimit);
         target = 0;
         if (!isnan(_target))
@@ -126,6 +128,7 @@ public:
     {
         if (velLim != velLimit) {
             velLimit = abs(velLim);
+            originalVelLimit = velLimit;
             return true;
         }
         return false;
@@ -478,6 +481,57 @@ public:
         return target - position;
     }
 
+    /**
+     * @brief  resets the velocity limit to the value set in the constructor or setVelLimit()
+     * @note may be useful, since setTargetAndVelLimitForTimedMove and setVelLimitForTimedMove change the velocity limit
+     */
+    void resetVelLimitToOriginal()
+    {
+        velLimit = originalVelLimit;
+    }
+
+    /**
+     * @brief  This function changes velLimit so that a move of a specified distance takes the specified time (if possible given acceleration limit)
+     * @note   using this function changes the value of velLimit from whatever you set it to when you created the Derivs_Limiter object
+     * @param  _dist: (float) how far you want to move
+     * @param  _time: (float) time in seconds that you would like it to take to move the given distance
+     * @param  _maxVel: (float, optional, default=NAN) maximum allowable velocity, if the required velocity exceeds this the function returns false, if NAN the velocity limit set in the constructor or setVelLimit() is used
+     * @retval (bool) true if move possible within time given acceleration limit, false if not possible (and nothing is changed)
+     */
+    boolean setVelLimitForTimedMove(float _dist, float _time, float _maxVel = NAN)
+    {
+        _dist = abs(_dist);
+        _time = abs(_time);
+        if (isnan(_maxVel))
+            _maxVel = originalVelLimit;
+        float tempVelLimit;
+        if (accelLimit == INFINITY)
+            tempVelLimit = _dist / _time;
+        else
+            tempVelLimit = (-0.5 * accelLimit * (-_time + sqrt(sq(_time) - 4 * _dist / accelLimit)));
+        boolean possible = !isnan(tempVelLimit) && tempVelLimit <= abs(_maxVel); //nan check, speed check
+        if (possible) {
+            velLimit = tempVelLimit;
+        }
+        return possible;
+    }
+
+    /**
+     * @brief  This function changes velLimit so that a move to the specified target position takes the specified time (if possible given acceleration limit) use like setTarget()
+     * @note   using this function changes the value of velLimit from whatever you set it to when you created the Derivs_Limiter object
+     * @param  _target: (float) position you'd like to move to
+     * @param  _time: (float) how long you would like the movement to take
+     * @param  _maxVel: (float, optional, default=NAN) maximum allowable velocity, if the required velocity exceeds this the function returns false, if NAN the velocity limit set in the constructor or setVelLimit() is used
+     * @retval (bool) true if move possible within time given acceleration limit, false if not possible (and nothing is changed)
+     */
+    boolean setTargetAndVelLimitForTimedMove(float _target, float _time, float _maxVel = NAN)
+    {
+        boolean ret = setVelLimitForTimedMove(_target - position, _time, _maxVel);
+        if (ret)
+            target = _target;
+        return ret;
+    }
+
 protected:
     /**
      * @brief  this is where the actual code is
@@ -517,8 +571,7 @@ protected:
 
         if (preventGoingTooFast)
             velocity = constrain(velocity, -velLimit, velLimit);
-
-        if ((target == position && (preventGoingWrongWay || velocity == 0)) || ((velocity != 0 && target != position && (velocity > 0) == (target - position > 0)) && abs(target - position) <= abs(velocity * time) && (abs(velocity) < accelLimit * time * maxStoppingAccel))) { //basically there
+        if ((target == position && (preventGoingWrongWay || velocity == 0 || (abs(velocity) < accelLimit * time * maxStoppingAccel))) || ((velocity != 0 && target != position && (velocity > 0) == (target - position > 0)) && abs(target - position) <= abs(velocity * time) && (abs(velocity) < accelLimit * time * maxStoppingAccel))) { //basically there
             accel = 0;
             velocity = 0;
             position = target;
@@ -527,7 +580,7 @@ protected:
             accel = (((target - position) > 0 ? velLimit : -velLimit) - velocity) / time; //acceleration to reach target vel
             accel = constrain(accel, -maxAccelA, maxAccelA);
             if (velocity == 0 || (velocity > 0) == (target - position > 0)) { //going towards target
-                float maxAccelB = abs((target - position) / time / time);
+                float maxAccelB = (abs(target - position) / time - abs(velocity)) / time;
                 accel = constrain(accel, -maxAccelB, maxAccelB); //don't overshoot
             }
 
@@ -540,6 +593,16 @@ protected:
                     accel = -sq(velocity) / 2 / (target - position) / 2; //partial decelleration to reduce "spikes" some
                     accel = constrain(accel, -accelLimit * maxStoppingAccel, accelLimit * maxStoppingAccel);
                 }
+            }
+            if (abs(accel) == INFINITY) {
+                accel = 0;
+                velocity = 0;
+                position = target;
+            }
+            if (((velocity != 0 && target != position && (velocity > 0) == (target - position > 0)) && abs(target - position) <= abs(velocity * time) && (abs(velocity) < accelLimit * time * maxStoppingAccel))) { //final check against overshoot
+                accel = 0;
+                velocity = 0;
+                position = target;
             }
             velocity += accel * time;
             position += velocity * time;
