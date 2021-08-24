@@ -517,7 +517,7 @@ public:
     }
 
     /**
-     * @brief  This function changes velLimit so that a move to the specified target position takes the specified time (if possible given acceleration limit) use like setTarget()
+     * @brief  This function changes velLimit so that a move to the specified target position takes the specified time (if possible given acceleration limit)
      * @note   using this function changes the value of velLimit from whatever you set it to when you created the Derivs_Limiter object
      * @param  _target: (float) position you'd like to move to
      * @param  _time: (float) how long you would like the movement to take
@@ -529,6 +529,29 @@ public:
         boolean ret = setVelLimitForTimedMove(_target - position, _time, _maxVel);
         if (ret)
             target = _target;
+        return ret;
+    }
+
+    /**
+     * @brief  This function changes velLimit so that a move to the specified target position takes the specified time if possible given acceleration limit, and if not possible resets the velocity limit to the original value (or _maxVel if not NAN) and goes to the target at that speed instead
+     * @note   using this function changes the value of velLimit from whatever you set it to when you created the Derivs_Limiter object
+     * @param  _target: (float) position you'd like to move to
+     * @param  _time: (float) how long you would like the movement to take
+     * @param  _maxVel: (float, optional, default=NAN) maximum allowable velocity, if the required velocity exceeds this the function returns false, if NAN the velocity limit set in the constructor or setVelLimit() is used
+     * @retval (bool) true if move possible within time given acceleration limit, false if not possible (and move happens with maxVel instead but will not complete in time)
+     */
+    boolean setTargetTimedMovePreferred(float _target, float _time, float _maxVel = NAN)
+    {
+        boolean ret = setVelLimitForTimedMove(_target - position, _time, _maxVel);
+        if (ret)
+            target = _target;
+        else { //not possible in time given acceleration
+            if (isnan(_maxVel))
+                resetVelLimitToOriginal();
+            else
+                velLimit = _maxVel;
+            target = _target;
+        }
         return ret;
     }
 

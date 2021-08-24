@@ -24,14 +24,14 @@ void loop()
         if (state == true)
             limiter.setTargetAndVelLimitForTimedMove(0, 10);
         state = false;
-        myServo.write(limiter.calc());
         limiter.calc();
+        myServo.write(limiter.getPosition());
     } else {
         if (state == false)
             limiter.setTargetAndVelLimitForTimedMove(180, 10);
         state = true;
-        myServo.write(limiter.calc());
         limiter.calc();
+        myServo.write(limiter.getPosition());
     }
     Serial.print(limiter.getPosition());
     Serial.print(",");
