@@ -555,6 +555,28 @@ public:
         return ret;
     }
 
+    /**
+     * @brief  set position and target to a value
+     * @param  targPos: (float)
+     * @retval None
+     */
+    void setPositionAndTarget(float targPos)
+    {
+        setPosition(targPos);
+        setTarget(targPos);
+    }
+
+    /**
+     * @brief  set position and target to position + increment
+     * @param  increment: (float)
+     * @retval None
+     */
+    void jogPosition(float increment)
+    {
+        velocity = 0;
+        setPositionAndTarget(position + increment);
+    }
+
 protected:
     /**
      * @brief  this is where the actual code is
