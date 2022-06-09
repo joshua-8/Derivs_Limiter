@@ -202,6 +202,20 @@ public:
     }
 
     /**
+     * @brief  set velocity and acceleration limits
+     * @param  velLim: (float) velocity limit
+     * @param  accLim: (float) acceleration limit
+     * @param  decLim: (float) deceleration limit, set NAN to set equal to acceleration limit
+     * @retval None
+     */
+    void setVelAccelLimits(float velLim, float accLim, float decLim = NAN)
+    {
+        setVelLimit(velLim);
+        setAccelLimit(accLim);
+        setDecelLimit(decLim);
+    }
+
+    /**
      * @brief  get velocity limit setting
      * @retval  (float)
      */
@@ -226,20 +240,6 @@ public:
     float getDecelLimit()
     {
         return decelLimit;
-    }
-
-    /**
-     * @brief  set velocity and acceleration limits
-     * @param  velLim: (float) velocity limit
-     * @param  accLim: (float) acceleration limit
-     * @param  decLim: (float) deceleration limit, set NAN to set equal to acceleration limit
-     * @retval None
-     */
-    void setVelAccelLimits(float velLim, float accLim, float decLim = NAN)
-    {
-        setVelLimit(velLim);
-        setAccelLimit(accLim);
-        setDecelLimit(decLim);
     }
 
     /**
@@ -350,29 +350,6 @@ public:
     }
 
     /**
-     * @brief  call this as frequently as possible to calculate all the values
-     * @retval (float) position
-     */
-    float calc()
-    {
-        return _calc();
-    }
-
-    /**
-     * @brief  call this as frequently as possible to calculate all the values
-     * @param  _target: set the target position, ignored if NAN
-     * @retval (float) position
-     */
-    float calc(float _target)
-    {
-        if (!isnan(_target)) {
-            target = _target;
-            posMode = true;
-        }
-        return _calc();
-    }
-
-    /**
      * @brief  set target position (doesn't run calculation, make sure to run calc() yourself)
      * @param  _target: (float) position, ignored if NAN
      * @retval  (bool) position==target
@@ -393,6 +370,28 @@ public:
     float getTarget()
     {
         return target;
+    }
+
+    /**
+     * @brief  set position and target to a value
+     * @param  targPos: (float)
+     * @retval None
+     */
+    void setPositionAndTarget(float targPos)
+    {
+        setPosition(targPos);
+        setTarget(targPos);
+    }
+
+    /**
+     * @brief  set position and target to position + increment
+     * @param  increment: (float)
+     * @retval None
+     */
+    void jogPosition(float increment)
+    {
+        velocity = 0;
+        setPositionAndTarget(position + increment);
     }
 
     /**
@@ -493,15 +492,6 @@ public:
     }
 
     /**
-     * @brief  returns value of preventGoingWrongWay setting
-     * @retval (bool)
-     */
-    bool getPreventGoingWrongWay()
-    {
-        return preventGoingWrongWay;
-    }
-
-    /**
      * @brief  sets value of preventGoingWrongWay, true = immediately set velocity to zero if moving away from target, false = stay under accel limit
      * @param  _preventGoingWrongWay: (bool)
      * @retval None
@@ -512,12 +502,12 @@ public:
     }
 
     /**
-     * @brief  returns value of preventGoingTooFast setting
+     * @brief  returns value of preventGoingWrongWay setting
      * @retval (bool)
      */
-    bool getPreventGoingTooFast()
+    bool getPreventGoingWrongWay()
     {
-        return preventGoingTooFast;
+        return preventGoingWrongWay;
     }
 
     /**
@@ -528,6 +518,15 @@ public:
     void setPreventGoingTooFast(bool _preventGoingTooFast)
     {
         preventGoingTooFast = _preventGoingTooFast;
+    }
+
+    /**
+     * @brief  returns value of preventGoingTooFast setting
+     * @retval (bool)
+     */
+    bool getPreventGoingTooFast()
+    {
+        return preventGoingTooFast;
     }
 
     /**
@@ -572,6 +571,7 @@ public:
         velocity = vel;
         velocityTarget = vel;
     }
+
     /**
      * @brief  switch to velocity mode, and set a target velocity that the target should go towards limited by accelLimit
      * @param  vel: (float)
@@ -585,6 +585,7 @@ public:
         posMode = false;
         velocityTarget = vel;
     }
+
     /**
      * @brief  true if in position target mode, false if in velocity target mode
      * @retval (bool)
@@ -694,25 +695,26 @@ public:
     }
 
     /**
-     * @brief  set position and target to a value
-     * @param  targPos: (float)
-     * @retval None
+     * @brief  call this as frequently as possible to calculate all the values
+     * @retval (float) position
      */
-    void setPositionAndTarget(float targPos)
+    float calc()
     {
-        setPosition(targPos);
-        setTarget(targPos);
+        return _calc();
     }
 
     /**
-     * @brief  set position and target to position + increment
-     * @param  increment: (float)
-     * @retval None
+     * @brief  call this as frequently as possible to calculate all the values
+     * @param  _target: set the target position, ignored if NAN
+     * @retval (float) position
      */
-    void jogPosition(float increment)
+    float calc(float _target)
     {
-        velocity = 0;
-        setPositionAndTarget(position + increment);
+        if (!isnan(_target)) {
+            target = _target;
+            posMode = true;
+        }
+        return _calc();
     }
 
 protected:
@@ -822,7 +824,6 @@ protected:
             }
         } else { // not pos mode, vel mode
             float tempVelocity = velocity;
-            velocityTarget = constrain(velocityTarget, -velLimit, velLimit);
             velocityTarget = constrain(velocityTarget, -velLimit, velLimit);
             if (velocity != velocityTarget) {
                 if (velocityTarget == 0) {
