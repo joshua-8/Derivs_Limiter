@@ -11,11 +11,11 @@
 #include <Derivs_Limiter.h>
 #include <Servo.h>
 
-Derivs_Limiter limiter = Derivs_Limiter(100, 75); // velocityLimit, accelerationLimit
+Derivs_Limiter limiter = Derivs_Limiter(100, 100, 50); // velocityLimit, accelerationLimit, decelerationLimit
 Servo myServo;
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
     myServo.attach(9);
 }
 void loop()
@@ -31,4 +31,5 @@ void loop()
     Serial.print(",");
     Serial.print(limiter.getAcceleration());
     Serial.println();
+    delay(25);
 }
