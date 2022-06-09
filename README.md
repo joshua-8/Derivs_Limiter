@@ -7,6 +7,8 @@ https://github.com/joshua-8/Derivs_Limiter
 
 [DETAILED DOCUMENTATION](https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html) (made with Doxygen)
 
+Please ask any questions [here](https://github.com/joshua-8/Derivs_Limiter/discussions).
+
 This library can be used to limit the first and second derivative of a variable as it approaches a target value.
 
 It's easiest to think of in terms of position, velocity, and acceleration. 
@@ -114,7 +116,7 @@ _**Velocity, position and/or acceleration limits can be set as INFINITY in order
 
 ## Notes:
 
-During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid. (Also, note that if the acceleration limit is infinity, this value stays zero when position stops)
+During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid. (Also, note that if the deceleration limit is infinity, this value stays zero when position stops)
 
 NAN (not a number) values are ignored.
 

@@ -29,8 +29,8 @@ void setup()
     limiter.getPreventGoingWrongWay();
     limiter.setPreventGoingTooFast(true);
     limiter.getPreventGoingTooFast();
-    limiter.setMaxStoppingAccel(INFINITY);
-    limiter.getMaxStoppingAccel();
+    limiter.setMaxStoppingDecel(INFINITY);
+    limiter.getMaxStoppingDecel();
     limiter.getLowPosLimit();
     limiter.getHighPosLimit();
     limiter.setLowPosLimit(-INFINITY);

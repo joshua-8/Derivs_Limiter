@@ -14,12 +14,13 @@ protected:
     float target;
     float velLimit;
     float accelLimit;
+    float decelLimit;
     float time;
     bool preventGoingWrongWay;
     bool preventGoingTooFast;
     float posLimitLow;
     float posLimitHigh;
-    float maxStoppingAccel;
+    float maxStoppingDecel;
     float lastTarget;
     float targetDelta;
     float lastPos;
@@ -27,12 +28,15 @@ protected:
     float originalVelLimit;
     float* positionPointer;
     float* velocityPointer;
+    bool posMode;
+    float velocityTarget;
 
 public:
     /**
      * @brief  constructor for Derivs_Limiter class
      * @param  _velLimit: (float) velocity limit (units per second)
      * @param  _accelLimit: (float) acceleration limit (units per second per second)
+     * @param  _decelLimit: (float) default=NAN, deceleration limit (units per second per second), set to NAN to use accelLimit
      * @param  _target: (float) default=0, target value to make position approach
      * @param  _startPos: (float) default=0, starting position
      * @param  _startVel: (float) default=0, starting velocity
@@ -40,13 +44,13 @@ public:
      * @param  _preventGoingTooFast: (bool) default=true, constrain velocity to below velLimit
      * @param  _posLimitLow: (float) default=-INFINITY, lower bound for position
      * @param  _posLimitHigh: (float) default=INFINITY, upper bound for position
-     * @param  _maxStoppingAccel: (float) default=INFINITY, how many times accelLimit can be used to stop in time for target position
+     * @param  _maxStoppingDecel: (float) default=INFINITY, how many times accelLimit can be used to stop in time for target position
      * @param  _posPointer: set pointer to an external variable that will be read and modified during calc as position use &var
      * @param  _velPointer: set pointer to an external variable that will be read and modified during calc as velocity  use &var
      */
-    Derivs_Limiter(float _velLimit, float _accelLimit, float _target = 0,
+    Derivs_Limiter(float _velLimit, float _accelLimit, float _decelLimit = NAN, float _target = 0,
         float _startPos = 0, float _startVel = 0, bool _preventGoingWrongWay = true, bool _preventGoingTooFast = true,
-        float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingAccel = INFINITY,
+        float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingDecel = INFINITY,
         float* _posPointer = NULL, float* _velPointer = NULL)
     {
         accel = 0;
@@ -54,9 +58,11 @@ public:
         velLimit = abs(_velLimit);
         originalVelLimit = velLimit;
         accelLimit = abs(_accelLimit);
+        setDecelLimit(_decelLimit);
         target = 0;
         if (!isnan(_target))
             target = _target;
+        posMode = true;
         lastTarget = _target;
         targetDelta = 0;
         position = 0;
@@ -64,6 +70,7 @@ public:
             position = _startPos;
         lastPos = position;
         posDelta = 0;
+        velocity = 0;
         if (!isnan(_startVel))
             velocity = _startVel;
         time = 0;
@@ -71,15 +78,17 @@ public:
         preventGoingTooFast = _preventGoingTooFast;
         posLimitLow = _posLimitLow;
         posLimitHigh = max(_posLimitHigh, posLimitLow);
-        maxStoppingAccel = max(_maxStoppingAccel, (float)1.0);
+        maxStoppingDecel = max(_maxStoppingDecel, (float)1.0);
         positionPointer = _posPointer;
         velocityPointer = _velPointer;
+        velocityTarget = 0;
     }
 
     /**
      * @brief  set position and velocity
-     * @param  pos: (float) default: 0
-     * @param  vel: (float) default: 0
+     * @param  pos: (float) default: 0, ignored if NAN
+     * @param  vel: (float) default: 0, ignored if NAN
+     * @retval None
      */
     void setPositionVelocity(float pos = 0, float vel = 0)
     {
@@ -90,31 +99,49 @@ public:
     }
 
     /**
-     * @brief  set position
-     * @param  pos: (float) default: 0
+     * @brief  set target and position
+     * @param  targ: (float) default: 0, ignored if NAN
+     * @param  pos: (float) default: 0, ignored if NAN
+     * @retval None
+     */
+    void setTargetAndPosition(float targ = 0, float pos = 0)
+    {
+        if (!isnan(targ)) {
+            target = targ;
+            posMode = true;
+        }
+        if (!isnan(pos))
+            position = pos;
+    }
+
+    /**
+     * @brief  set position, ignored if NAN
+     * @param  pos: (float) default: 0, ignored if NAN
      * @retval (bool) true if position changed
      */
     bool setPosition(float pos = 0)
     {
         if (pos != position) {
-            if (!isnan(pos))
+            if (!isnan(pos)) {
                 position = pos;
-            return true;
+                return true;
+            }
         }
         return false;
     }
 
     /**
      * @brief  set velocity
-     * @param  vel: (float) default: 0
+     * @param  vel: (float) default: 0, ignored if NAN
      * @retval (bool) true if velocity changed
      */
     bool setVelocity(float vel = 0)
     {
         if (vel != velocity) {
-            if (!isnan(vel))
+            if (!isnan(vel)) {
                 velocity = vel;
-            return true;
+                return true;
+            }
         }
         return false;
     }
@@ -149,6 +176,32 @@ public:
     }
 
     /**
+     * @brief  set deceleration limit
+     * @param  _decelLimit: (float) deceleration limit, if NAN decelLimit gets set to accelLimit
+     * @retval None
+     */
+    void setDecelLimit(float _decelLimit = NAN)
+    {
+        if (isnan(_decelLimit)) { // decelLimit defaults to accelLimit
+            decelLimit = accelLimit;
+        } else {
+            decelLimit = abs(_decelLimit);
+        }
+    }
+
+    /**
+     * @brief combines setAccelLimit() with setDecelLimit()
+     * @param  _accelLimit:
+     * @param  _decelLimit:
+     * @retval None
+     */
+    void setAccelAndDecelLimits(float _accelLimit, float _decelLimit = NAN)
+    {
+        setAccelLimit(_accelLimit);
+        setDecelLimit(_decelLimit);
+    }
+
+    /**
      * @brief  get velocity limit setting
      * @retval  (float)
      */
@@ -167,14 +220,26 @@ public:
     }
 
     /**
+     * @brief  get deceleration limit setting
+     * @retval  (float)
+     */
+    float getDecelLimit()
+    {
+        return decelLimit;
+    }
+
+    /**
      * @brief  set velocity and acceleration limits
      * @param  velLim: (float) velocity limit
      * @param  accLim: (float) acceleration limit
+     * @param  decLim: (float) deceleration limit, set NAN to set equal to acceleration limit
+     * @retval None
      */
-    void setVelAccelLimits(float velLim, float accLim)
+    void setVelAccelLimits(float velLim, float accLim, float decLim = NAN)
     {
         setVelLimit(velLim);
         setAccelLimit(accLim);
+        setDecelLimit(decLim);
     }
 
     /**
@@ -207,20 +272,21 @@ public:
 
     /**
      * @brief  set setting for how many times accelLimit can be used to stop in time for target position
-     * @param  _maxStoppingAccel: (float) default=INFINITY, must be >=1.0
+     * @param  _maxStoppingDecel: (float) default=INFINITY, must be >=1.0
+     * @retval None
      */
-    void setMaxStoppingAccel(float _maxStoppingAccel = INFINITY)
+    void setMaxStoppingDecel(float _maxStoppingDecel = INFINITY)
     {
-        maxStoppingAccel = max(_maxStoppingAccel, (float)1.0);
+        maxStoppingDecel = max(_maxStoppingDecel, (float)1.0);
     }
 
     /**
      * @brief  get setting for how many times accelLimit can be used to stop in time for target position
      * @retval (float)
      */
-    float getMaxStoppingAccel()
+    float getMaxStoppingDecel()
     {
-        return maxStoppingAccel;
+        return maxStoppingDecel;
     }
 
     /**
@@ -243,12 +309,13 @@ public:
 
     /**
      * @brief  set the lower boundary for position
+     * @note must be lower than highPosLimit
      * @param  lowLimit: (float), -INFINITY means no limit
-     * @retval (bool) did position change
+     * @retval (bool) did boundary change (was it valid)
      */
     bool setLowPosLimit(float lowLimit)
     {
-        if (lowLimit != posLimitLow) {
+        if (lowLimit < posLimitHigh) {
             posLimitLow = lowLimit;
             return true;
         }
@@ -257,14 +324,14 @@ public:
 
     /**
      * @brief  set the higher boundary for position
-     * @note   limit set to posLimitLow if below posLimitLow
+     * @note must be higher than lowPosLimit
      * @param  highLimit: (float), INFINITY means no limit
-     * @retval (bool) did position change
+     * @retval (bool) did boundary change (was it valid)
      */
     bool setHighPosLimit(float highLimit)
     {
-        if (max(highLimit, posLimitLow) != posLimitHigh) {
-            posLimitHigh = max(highLimit, posLimitLow);
+        if (highLimit > posLimitLow) {
+            posLimitHigh = highLimit;
             return true;
         }
         return false;
@@ -274,6 +341,7 @@ public:
      * @brief  set the boundaries for position
      * @param  lowLimit: (float)
      * @param  highLimit: (float)
+     * @retval None
      */
     void setPosLimits(float lowLimit, float highLimit)
     {
@@ -292,25 +360,29 @@ public:
 
     /**
      * @brief  call this as frequently as possible to calculate all the values
-     * @param  _target: set the target position
+     * @param  _target: set the target position, ignored if NAN
      * @retval (float) position
      */
     float calc(float _target)
     {
-        if (!isnan(_target))
+        if (!isnan(_target)) {
             target = _target;
+            posMode = true;
+        }
         return _calc();
     }
 
     /**
      * @brief  set target position (doesn't run calculation, make sure to run calc() yourself)
-     * @param  _target: (float) position
+     * @param  _target: (float) position, ignored if NAN
      * @retval  (bool) position==target
      */
     bool setTarget(float _target)
     {
-        if (!isnan(_target))
+        if (!isnan(_target)) {
             target = _target;
+            posMode = true;
+        }
         return position == target;
     }
 
@@ -325,6 +397,7 @@ public:
 
     /**
      * @brief If calc hasn't been run for a while, use this before starting to use it again to protect from large jumps.
+     * @retval None
      */
     void resetTime()
     {
@@ -401,6 +474,7 @@ public:
      * @brief  set pointer to an external variable that will be read and modified during calc as position
      * @note   set to NULL to not use, set to variable with setPositionPointer(&variable)
      * @param  _positionPointer: (float*)
+     * @retval None
      */
     void setPositionPointer(float* _positionPointer)
     {
@@ -411,6 +485,7 @@ public:
      * @brief  set pointer to an external variable that will be read and modified during calc as velocity
      * @note   set to NULL to not use,  set to variable with setVelocityPointer(&variable)
      * @param  _velocityPointer: (float*)
+     * @retval None
      */
     void setVelocityPointer(float* _velocityPointer)
     {
@@ -429,6 +504,7 @@ public:
     /**
      * @brief  sets value of preventGoingWrongWay, true = immediately set velocity to zero if moving away from target, false = stay under accel limit
      * @param  _preventGoingWrongWay: (bool)
+     * @retval None
      */
     void setPreventGoingWrongWay(bool _preventGoingWrongWay)
     {
@@ -447,6 +523,7 @@ public:
     /**
      * @brief  sets value of preventGoingTooFast, true = constrain velocity to velLimit, false decelerate at accelLimit to velLimit
      * @param  _preventGoingTooFast: (bool)
+     * @retval None
      */
     void setPreventGoingTooFast(bool _preventGoingTooFast)
     {
@@ -482,8 +559,54 @@ public:
     }
 
     /**
+     * @brief  switch to velocity mode, and set velocity immediately to a constant value.
+     * @param  vel: (float)
+     * @retval None
+     */
+    void setVelConstant(float vel)
+    {
+        if (isnan(vel)) {
+            return;
+        }
+        posMode = false;
+        velocity = vel;
+        velocityTarget = vel;
+    }
+    /**
+     * @brief  switch to velocity mode, and set a target velocity that the target should go towards limited by accelLimit
+     * @param  vel: (float)
+     * @retval None
+     */
+    void setVelTarget(float vel)
+    {
+        if (isnan(vel)) {
+            return;
+        }
+        posMode = false;
+        velocityTarget = vel;
+    }
+    /**
+     * @brief  true if in position target mode, false if in velocity target mode
+     * @retval (bool)
+     */
+    bool isPosModeNotVelocity()
+    {
+        return posMode;
+    }
+
+    /**
+     * @brief  get the target velocity used by the velocity control mode
+     * @retval (float)
+     */
+    float getVelTarget()
+    {
+        return velocityTarget;
+    }
+
+    /**
      * @brief  resets the velocity limit to the value set in the constructor or setVelLimit()
      * @note may be useful, since setTargetAndVelLimitForTimedMove and setVelLimitForTimedMove change the velocity limit
+     * @retval None
      */
     void resetVelLimitToOriginal()
     {
@@ -500,16 +623,27 @@ public:
      */
     boolean setVelLimitForTimedMove(float _dist, float _time, float _maxVel = NAN)
     {
+        if (isnan(_dist) || isnan(_time)) {
+            return false;
+        }
         _dist = abs(_dist);
         _time = abs(_time);
         if (isnan(_maxVel))
             _maxVel = originalVelLimit;
         float tempVelLimit;
-        if (accelLimit == INFINITY)
+        if (accelLimit == INFINITY && decelLimit == INFINITY)
             tempVelLimit = _dist / _time;
-        else
-            tempVelLimit = (-0.5 * accelLimit * (-_time + sqrt(sq(_time) - 4 * _dist / accelLimit)));
-        boolean possible = !isnan(tempVelLimit) && tempVelLimit <= abs(_maxVel); //nan check, speed check
+        else {
+            float acc;
+            if (accelLimit == INFINITY && decelLimit != INFINITY)
+                acc = decelLimit * 2;
+            else if (accelLimit != INFINITY && decelLimit == INFINITY)
+                acc = accelLimit * 2;
+            else
+                acc = sqrt(decelLimit * accelLimit); // find single acceleration that takes equivalent time to the two different limits.
+            tempVelLimit = (-0.5 * acc * (-_time + sqrt(sq(_time) - 4 * _dist / acc)));
+        }
+        boolean possible = !isnan(tempVelLimit) && tempVelLimit <= abs(_maxVel); // nan check, speed check
         if (possible) {
             velLimit = tempVelLimit;
         }
@@ -527,8 +661,10 @@ public:
     boolean setTargetAndVelLimitForTimedMove(float _target, float _time, float _maxVel = NAN)
     {
         boolean ret = setVelLimitForTimedMove(_target - position, _time, _maxVel);
-        if (ret)
+        if (ret) {
             target = _target;
+            posMode = true;
+        }
         return ret;
     }
 
@@ -543,14 +679,16 @@ public:
     boolean setTargetTimedMovePreferred(float _target, float _time, float _maxVel = NAN)
     {
         boolean ret = setVelLimitForTimedMove(_target - position, _time, _maxVel);
-        if (ret)
+        if (ret) {
             target = _target;
-        else { //not possible in time given acceleration
+            posMode = true;
+        } else { // not possible in time given acceleration
             if (isnan(_maxVel))
                 resetVelLimitToOriginal();
             else
                 velLimit = _maxVel;
             target = _target;
+            posMode = true;
         }
         return ret;
     }
@@ -592,7 +730,7 @@ protected:
 
         time = (micros() - lastTime) / 1000000.0;
         if (lastTime == 0) {
-            time = 0; //in case there's a delay between starting the program and the first calculation avoid jump at start
+            time = 0; // in case there's a delay between starting the program and the first calculation avoid jump at start
             lastTime = micros();
         }
         if (time == 0) {
@@ -600,6 +738,7 @@ protected:
         }
         lastTime = micros();
 
+        // constrain positions within limits
         if (position > posLimitHigh) {
             position = posLimitHigh;
             velocity = 0;
@@ -608,50 +747,102 @@ protected:
             velocity = 0;
         }
         target = constrain(target, posLimitLow, posLimitHigh);
+
         targetDelta = target - lastTarget;
         lastTarget = target;
 
-        if (preventGoingWrongWay && velocity != 0 && target != position && ((velocity > 0) != (target - position > 0))) //going the wrong way
-            velocity = 0;
-
-        if (preventGoingTooFast)
+        if (preventGoingTooFast) {
             velocity = constrain(velocity, -velLimit, velLimit);
-        if ((target == position && (preventGoingWrongWay || velocity == 0 || (abs(velocity) < accelLimit * time * maxStoppingAccel))) || ((velocity != 0 && target != position && (velocity > 0) == (target - position > 0)) && abs(target - position) <= abs(velocity * time) && (abs(velocity) < accelLimit * time * maxStoppingAccel))) { //basically there
-            accel = 0;
-            velocity = 0;
-            position = target;
-        } else { //need to move
-            float maxAccelA = min(accelLimit, velLimit / time);
-            accel = (((target - position) > 0 ? velLimit : -velLimit) - velocity) / time; //acceleration to reach target vel
-            accel = constrain(accel, -maxAccelA, maxAccelA);
-            if (velocity == 0 || (velocity > 0) == (target - position > 0)) { //going towards target
-                float maxAccelB = (abs(target - position) / time - abs(velocity)) / time;
-                accel = constrain(accel, -maxAccelB, maxAccelB); //don't overshoot
+        }
+        if (posMode) {
+            if (preventGoingWrongWay && velocity != 0 && target != position && ((velocity > 0) != (target - position > 0))) { // going the wrong way
+                velocity = 0;
             }
 
-            if (velocity != 0 && target != position && ((velocity > 0) == (target - position > 0))) { //going towards target
-                float stoppingDistance = sq(velocity) / 2 / accelLimit;
-                if (abs(target - position) <= stoppingDistance) { //time to start slowing down
-                    accel = -sq(velocity) / 2 / (target - position);
-                    accel = constrain(accel, -accelLimit * maxStoppingAccel, accelLimit * maxStoppingAccel);
-                } else if (abs(target - position - velocity * time) <= stoppingDistance) { //on the border of needing to slow down
-                    accel = -sq(velocity) / 2 / (target - position) / 2; //partial decelleration to reduce "spikes" some
-                    accel = constrain(accel, -accelLimit * maxStoppingAccel, accelLimit * maxStoppingAccel);
+            if (velocity == 0 && position == target) { // if stopped at the target, no calculations are needed
+                accel = 0;
+                return position;
+            }
+
+            if (velocity != 0 && target != position && (velocity > 0) == (target - position > 0)
+                && (abs(position - target) - abs(velocity * (time)) <= sq(velocity) / 2.0 / decelLimit)) {
+                // predicted to be too close next time, decel now.
+                if (abs(position - target) <= abs(velocity * time) && (abs(velocity) <= decelLimit * maxStoppingDecel * time)) { // close enough and slow enough, just stop
+                    accel = 0;
+                    velocity = 0;
+                    position = target;
+                } else { // decel
+                    accel = -sq(velocity) / 2.0 / (target - (position));
+                    accel = constrain(accel, -decelLimit * maxStoppingDecel, decelLimit * maxStoppingDecel);
+                    velocity += accel * time;
+                    position += velocity * time;
+                }
+            } else if (velocity != 0 && target != position && (velocity > 0) != (target - position > 0)) { // if going wrong way, decel
+                accel = ((target - position > 0) ? decelLimit : -decelLimit);
+                velocity += accel * time;
+                if (velocity != 0 && (velocity > 0) == (target - position > 0)) { // switched direction, stop at zero velocity, in case accel is lower
+                    velocity = 0;
+                    accel = 0;
+                } else {
+                    position += velocity * time;
+                }
+            } else if (abs(velocity) < velLimit) { // too slow, speed up
+                float tempVelocity = velocity;
+                accel = (position > target) ? -accelLimit : accelLimit;
+                velocity += accel * time;
+                velocity = constrain(velocity, -velLimit, velLimit);
+                float maxSpeedThatCanBeStopped = sqrt(2 * (decelLimit)*abs(position - target)); // v^2 = u^2 + 2as
+                velocity = constrain(velocity, -maxSpeedThatCanBeStopped, maxSpeedThatCanBeStopped);
+                accel = (velocity - tempVelocity) / time;
+                position += velocity * time;
+                if (abs(position - target) <= abs(velocity * time) && (abs(velocity) <= decelLimit * maxStoppingDecel * time)) { // close enough and slow enough, just stop
+                    accel = 0;
+                    velocity = 0;
+                    position = target;
+                }
+            } else if (abs(velocity) > velLimit) { // too fast, slow down
+                boolean velPositive = (velocity > 0);
+                float tempVelocity = velocity;
+                velocity += velPositive ? -decelLimit * time : decelLimit * time;
+                if (velPositive) {
+                    if (velocity < velLimit) {
+                        velocity = velLimit;
+                    }
+                } else { // vel negative
+                    if (velocity > -velLimit) {
+                        velocity = -velLimit;
+                    }
+                }
+
+                accel = (velocity - tempVelocity) / time;
+                position += velocity * time;
+            } else { // coast, no accel
+                accel = 0;
+                position += velocity * time;
+            }
+        } else { // not pos mode, vel mode
+            float tempVelocity = velocity;
+            velocityTarget = constrain(velocityTarget, -velLimit, velLimit);
+            velocityTarget = constrain(velocityTarget, -velLimit, velLimit);
+            if (velocity != velocityTarget) {
+                if (velocityTarget == 0) {
+                    velocity += constrain(velocityTarget - velocity, -decelLimit * time, decelLimit * time);
+                } else if (velocityTarget > 0) {
+                    velocity += constrain(velocityTarget - velocity, -decelLimit * time, accelLimit * time);
+                    if (velocity < 0) { // prevent decel from crossing zero and causing accel
+                        velocity = 0;
+                    }
+                } else {
+                    velocity += constrain(velocityTarget - velocity, -accelLimit * time, decelLimit * time);
+                    if (velocity > 0) { // prevent decel from crossing zero and causing accel
+                        velocity = 0;
+                    }
                 }
             }
-            if (abs(accel) == INFINITY) {
-                accel = 0;
-                velocity = 0;
-                position = target;
-            }
-            if (((velocity != 0 && target != position && (velocity > 0) == (target - position > 0)) && abs(target - position) <= abs(velocity * time) && (abs(velocity) < accelLimit * time * maxStoppingAccel))) { //final check against overshoot
-                accel = 0;
-                velocity = 0;
-                position = target;
-            }
-            velocity += accel * time;
+            accel = (velocity - tempVelocity) / time;
             position += velocity * time;
         }
+
         if (positionPointer)
             *positionPointer = position;
         if (velocityPointer)

@@ -1,9 +1,11 @@
 /**
  * SmoothServo, an example for the Derivs_Limiter library
  * https://github.com/joshua-8/Derivs_Limiter
- * 
+ *
  * Connect a servo to power and pin 9,
  * and/or open the serial plotter to see the smoothed position values.
+ *
+ * More documentation can be found here: https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html
  */
 #include <Arduino.h>
 #include <Derivs_Limiter.h>
@@ -18,7 +20,7 @@ void setup()
 }
 void loop()
 {
-    if (millis() % 10000 < 5000) { //toggles every 5 seconds
+    if (millis() % 10000 < 5000) { // toggles every 5 seconds
         myServo.write(limiter.calc(0));
     } else {
         myServo.write(limiter.calc(180));

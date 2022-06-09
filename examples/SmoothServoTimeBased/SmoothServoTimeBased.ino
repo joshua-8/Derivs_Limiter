@@ -5,6 +5,8 @@
  * Connect a servo to power and pin 9,
  * and/or open the serial plotter to see the smoothed position values.
  * Every 15 seconds the servo should move for 10 seconds.
+ * 
+ * More documentation can be found here: https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html
  */
 #include <Arduino.h>
 #include <Derivs_Limiter.h>
