@@ -5,7 +5,7 @@ https://github.com/joshua-8/Derivs_Limiter
 [![arduino-library-badge](https://www.ardu-badge.com/badge/Derivs_Limiter.svg?)](https://www.ardu-badge.com/Derivs_Limiter)
 [![PlatformIO](https://badges.registry.platformio.org/packages/joshua1024/library/Derivs_Limiter.svg)](https://registry.platformio.org/libraries/joshua1024/Derivs_Limiter)
 
-[DETAILED DOCUMENTATION](https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html) (made with Doxygen)
+[DETAILED DOCUMENTATION](https://joshua-8.github.io/Derivs_Limiter/class_derivs___limiter.html) (made with Doxygen)
 
 Please ask any questions [here](https://github.com/joshua-8/Derivs_Limiter/discussions).
 

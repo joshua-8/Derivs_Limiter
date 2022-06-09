@@ -3,6 +3,8 @@
  * https://github.com/joshua-8/Derivs_Limiter
  *
  * Connect a servo to power and pin 9, and a potentiometer to pin A0
+ * 
+ * More documentation can be found here: https://joshua-8.github.io/Derivs_Limiter/class_derivs___limiter.html
  */
 #include <Arduino.h>
 #include <Derivs_Limiter.h>

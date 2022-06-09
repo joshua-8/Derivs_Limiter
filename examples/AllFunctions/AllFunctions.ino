@@ -5,7 +5,7 @@
  *  This example shows every function that the library has, 
  *  while it should compile, it is not meant to actually be run
  * 
- *  A more proper reference is here: https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html
+ *  A more proper reference is here: https://joshua-8.github.io/Derivs_Limiter/class_derivs___limiter.html
  */
 #include <Arduino.h>
 #include <Derivs_Limiter.h>

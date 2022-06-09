@@ -94,3 +94,8 @@ MACRO_EXPANSION        = YES
 # The default value is: NO.
 
 HAVE_DOT               = YES
+
+
+
+
+SORT_GROUP_NAMES = YES
