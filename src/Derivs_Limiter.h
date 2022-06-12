@@ -273,10 +273,10 @@ public:
 
     /**
      * @brief  set setting for how many times accelLimit can be used to stop in time for target position
-     * @param  _maxStoppingDecel: (float) default=INFINITY, must be >=1.0
+     * @param  _maxStoppingDecel: (float) must be >=1.0, can be INFINITY
      * @retval None
      */
-    void setMaxStoppingDecel(float _maxStoppingDecel = INFINITY)
+    void setMaxStoppingDecel(float _maxStoppingDecel)
     {
         maxStoppingDecel = max(_maxStoppingDecel, (float)1.0);
     }
