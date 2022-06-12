@@ -40,17 +40,17 @@ public:
      * @param  _target: (float) default=0, target value to make position approach
      * @param  _startPos: (float) default=0, starting position
      * @param  _startVel: (float) default=0, starting velocity
-     * @param  _preventGoingWrongWay: (bool) default=true, stop immediately if velocity is going away from target (default: true)
-     * @param  _preventGoingTooFast: (bool) default=true, constrain velocity to below velLimit
+     * @param  _preventGoingWrongWay: (bool) default=false, stop immediately if velocity is going away from target
+     * @param  _preventGoingTooFast: (bool) default=false, constrain velocity to within velLimit
      * @param  _posLimitLow: (float) default=-INFINITY, lower bound for position
      * @param  _posLimitHigh: (float) default=INFINITY, upper bound for position
-     * @param  _maxStoppingDecel: (float) default=INFINITY, how many times accelLimit can be used to stop in time for target position
-     * @param  _posPointer: set pointer to an external variable that will be read and modified during calc as position use &var
-     * @param  _velPointer: set pointer to an external variable that will be read and modified during calc as velocity  use &var
+     * @param  _maxStoppingDecel: (float) default=2, how many times accelLimit can be used to stop in time for target position (can be 1 through INFINITY)
+     * @param  _posPointer: set pointer to an external variable that will be read and modified during calc as position.  use &var
+     * @param  _velPointer: set pointer to an external variable that will be read and modified during calc as velocity.  use &var
      */
     Derivs_Limiter(float _velLimit, float _accelLimit, float _decelLimit = NAN, float _target = 0,
-        float _startPos = 0, float _startVel = 0, bool _preventGoingWrongWay = true, bool _preventGoingTooFast = true,
-        float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingDecel = INFINITY,
+        float _startPos = 0, float _startVel = 0, bool _preventGoingWrongWay = false, bool _preventGoingTooFast = false,
+        float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingDecel = 2,
         float* _posPointer = NULL, float* _velPointer = NULL)
     {
         accel = 0;
@@ -132,6 +132,7 @@ public:
 
     /**
      * @brief  set velocity
+     * @note If you want to switch to velocity control mode look at setVelConstant() and setVelTarget()
      * @param  vel: (float) default: 0, ignored if NAN
      * @retval (bool) true if velocity changed
      */
@@ -825,6 +826,9 @@ protected:
         } else { // not pos mode, vel mode
             float tempVelocity = velocity;
             velocityTarget = constrain(velocityTarget, -velLimit, velLimit);
+            if (preventGoingWrongWay && velocity != 0 && velocityTarget != 0 && (velocity > 0) != (velocityTarget > 0)) {
+                velocity = 0;
+            }
             if (velocity != velocityTarget) {
                 if (velocityTarget == 0) {
                     velocity += constrain(velocityTarget - velocity, -decelLimit * time, decelLimit * time);
