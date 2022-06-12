@@ -78,9 +78,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1d52fa75d0d6e198a9cc94495e52d398"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_derivs___limiter.html#a1d52fa75d0d6e198a9cc94495e52d398">Derivs_Limiter</a> (float _velLimit, float _accelLimit, float _decelLimit=NAN, float _target=0, float _startPos=0, float _startVel=0, bool _preventGoingWrongWay=true, bool _preventGoingTooFast=true, float _posLimitLow=-INFINITY, float _posLimitHigh=INFINITY, float _maxStoppingDecel=INFINITY, float *_posPointer=NULL, float *_velPointer=NULL)</td></tr>
-<tr class="memdesc:a1d52fa75d0d6e198a9cc94495e52d398"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor for <a class="el" href="class_derivs___limiter.html" title="This library can be used to limit the first and second derivative of a variable as it approaches a ta...">Derivs_Limiter</a> class  <a href="class_derivs___limiter.html#a1d52fa75d0d6e198a9cc94495e52d398">More...</a><br /></td></tr>
-<tr class="separator:a1d52fa75d0d6e198a9cc94495e52d398"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a674339d1db4ca3a2358e1d25b9eb6cf4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_derivs___limiter.html#a674339d1db4ca3a2358e1d25b9eb6cf4">Derivs_Limiter</a> (float _velLimit, float _accelLimit, float _decelLimit=NAN, float _target=0, float _startPos=0, float _startVel=0, bool _preventGoingWrongWay=false, bool _preventGoingTooFast=false, float _posLimitLow=-INFINITY, float _posLimitHigh=INFINITY, float _maxStoppingDecel=2, float *_posPointer=NULL, float *_velPointer=NULL)</td></tr>
+<tr class="memdesc:a674339d1db4ca3a2358e1d25b9eb6cf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">constructor for <a class="el" href="class_derivs___limiter.html" title="This library can be used to limit the first and second derivative of a variable as it approaches a ta...">Derivs_Limiter</a> class  <a href="class_derivs___limiter.html#a674339d1db4ca3a2358e1d25b9eb6cf4">More...</a><br /></td></tr>
+<tr class="separator:a674339d1db4ca3a2358e1d25b9eb6cf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d492d924400184333741065f3cbca35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_derivs___limiter.html#a2d492d924400184333741065f3cbca35">setPositionVelocity</a> (float pos=0, float vel=0)</td></tr>
 <tr class="memdesc:a2d492d924400184333741065f3cbca35"><td class="mdescLeft">&#160;</td><td class="mdescRight">set position and velocity  <a href="class_derivs___limiter.html#a2d492d924400184333741065f3cbca35">More...</a><br /></td></tr>
 <tr class="separator:a2d492d924400184333741065f3cbca35"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -299,8 +299,8 @@ Protected Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This library can be used to limit the first and second derivative of a variable as it approaches a target value. <a href="https://github.com/joshua-8/Derivs_Limiter">https://github.com/joshua-8/Derivs_Limiter</a>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a1d52fa75d0d6e198a9cc94495e52d398" name="a1d52fa75d0d6e198a9cc94495e52d398"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d52fa75d0d6e198a9cc94495e52d398">&#9670;&nbsp;</a></span>Derivs_Limiter()</h2>
+<a id="a674339d1db4ca3a2358e1d25b9eb6cf4" name="a674339d1db4ca3a2358e1d25b9eb6cf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a674339d1db4ca3a2358e1d25b9eb6cf4">&#9670;&nbsp;</a></span>Derivs_Limiter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -348,13 +348,13 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>_preventGoingWrongWay</em> = <code>true</code>, </td>
+          <td class="paramname"><em>_preventGoingWrongWay</em> = <code>false</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>_preventGoingTooFast</em> = <code>true</code>, </td>
+          <td class="paramname"><em>_preventGoingTooFast</em> = <code>false</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -372,7 +372,7 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>_maxStoppingDecel</em> = <code>INFINITY</code>, </td>
+          <td class="paramname"><em>_maxStoppingDecel</em> = <code>2</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -408,13 +408,13 @@ Protected Attributes</h2></td></tr>
     <tr><td class="paramname">_target</td><td>(float) default=0, target value to make position approach </td></tr>
     <tr><td class="paramname">_startPos</td><td>(float) default=0, starting position </td></tr>
     <tr><td class="paramname">_startVel</td><td>(float) default=0, starting velocity </td></tr>
-    <tr><td class="paramname">_preventGoingWrongWay</td><td>(bool) default=true, stop immediately if velocity is going away from target (default: true) </td></tr>
-    <tr><td class="paramname">_preventGoingTooFast</td><td>(bool) default=true, constrain velocity to below velLimit </td></tr>
+    <tr><td class="paramname">_preventGoingWrongWay</td><td>(bool) default=false, stop immediately if velocity is going away from target </td></tr>
+    <tr><td class="paramname">_preventGoingTooFast</td><td>(bool) default=false, constrain velocity to within velLimit </td></tr>
     <tr><td class="paramname">_posLimitLow</td><td>(float) default=-INFINITY, lower bound for position </td></tr>
     <tr><td class="paramname">_posLimitHigh</td><td>(float) default=INFINITY, upper bound for position </td></tr>
-    <tr><td class="paramname">_maxStoppingDecel</td><td>(float) default=INFINITY, how many times accelLimit can be used to stop in time for target position </td></tr>
-    <tr><td class="paramname">_posPointer</td><td>set pointer to an external variable that will be read and modified during calc as position use &amp;var </td></tr>
-    <tr><td class="paramname">_velPointer</td><td>set pointer to an external variable that will be read and modified during calc as velocity use &amp;var </td></tr>
+    <tr><td class="paramname">_maxStoppingDecel</td><td>(float) default=2, how many times accelLimit can be used to stop in time for target position (can be 1 through INFINITY) </td></tr>
+    <tr><td class="paramname">_posPointer</td><td>set pointer to an external variable that will be read and modified during calc as position. use &amp;var </td></tr>
+    <tr><td class="paramname">_velPointer</td><td>set pointer to an external variable that will be read and modified during calc as velocity. use &amp;var </td></tr>
   </table>
   </dd>
 </dl>
@@ -2417,6 +2417,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>set velocity </p>
+<dl class="section note"><dt>Note</dt><dd>If you want to switch to velocity control mode look at <a class="el" href="class_derivs___limiter.html#a55560bcd022d938be042ec4161ce6c4f" title="switch to velocity mode, and set velocity immediately to a constant value.">setVelConstant()</a> and <a class="el" href="class_derivs___limiter.html#ad775094ddc9877e618588f0bb86f5e56" title="switch to velocity mode, and set a target velocity that the target should go towards limited by accel...">setVelTarget()</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">vel</td><td>(float) default: 0, ignored if NAN </td></tr>
