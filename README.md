@@ -23,7 +23,7 @@ The formula in this program supports being run at uneven intervals, and allows f
 ### Create a Derivs_Limiter object:
 `Derivs_Limiter myLimiter = Derivs_Limiter(velocityLimit, accelLimit);`
 
-`Derivs_Limiter(float _velLimit, float _accelLimit, float _target = 0, float _startPos = 0, float _startVel = 0, bool _preventGoingWrongWay = true, bool _preventGoingTooFast = true, float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingAccel = INFINITY, float* _posPointer = NULL, float* _velPointer = NULL)`
+`Derivs_Limiter(float _velLimit, float _accelLimit, float _decelLimit = NAN, float _target = 0, float _startPos = 0, float _startVel = 0, bool _preventGoingWrongWay = false, bool _preventGoingTooFast = false, float _posLimitLow = -INFINITY, float _posLimitHigh = INFINITY, float _maxStoppingDecel = 2, float* _posPointer = NULL, float* _velPointer = NULL)
 
 _**Velocity, position and/or acceleration limits can be set as INFINITY in order to have no limit.**_
 
