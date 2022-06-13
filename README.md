@@ -29,89 +29,77 @@ _**Velocity, position and/or acceleration limits can be set as INFINITY in order
 
 ### quick reference: ([more detailed reference available here](https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html))
 
-  `  float calc()`  
 
-  `  float calc(float _target)`  
+    // all settings of constructor
 
-  `  bool setTarget(float _target)`  
+    limiter.setVelLimit(10);
+    limiter.setAccelLimit(5);
+    limiter.setDecelLimit(NAN);
+    limiter.setTarget(0);
+    limiter.setPosition(0);
+    limiter.setVelocity(0);
+    limiter.setPreventGoingWrongWay(false);
+    limiter.setPreventGoingTooFast(false);
+    limiter.setLowPosLimit(-INFINITY);
+    limiter.setHighPosLimit(INFINITY);
+    limiter.setMaxStoppingDecel(2);
+    limiter.setPositionPointer(NULL);
+    limiter.setVelocityPointer(NULL);
 
-  `  float getTarget()`  
+    /// settings grouped together for your convenience
 
-  `  float getPosition()`  
+    limiter.setPositionVelocity(0, 0); // position, velocity
+    limiter.setTargetAndPosition(0, 0); // target, position
+    limiter.setAccelAndDecelLimits(1, NAN); // accel, decel
+    limiter.setVelAccelLimits(1, 1, 1); // vel, accel, decel
+    limiter.setPosLimits(-INFINITY, INFINITY); // low limit, high limit
+    limiter.setPositionAndTarget(0); // both position and target get set to the same value
 
-  `  float getVelocity()`  
+    // get output
 
-  `  float getAcceleration()`
+    limiter.getPosition();
+    limiter.getVelocity();
+    limiter.getAcceleration();
 
-  `  void setPositionVelocity(float pos = 0, float vel = 0)`  
+    // get settings
 
-  `  bool setPosition(float pos = 0)`  
+    limiter.getTarget();
+    limiter.getVelLimit();
+    limiter.getAccelLimit();
+    limiter.getDecelLimit();
+    limiter.getMaxStoppingDecel();
+    limiter.getLowPosLimit();
+    limiter.getHighPosLimit();
 
-  `  bool setVelocity(float vel = 0)`  
+    // other
+    limiter.jogPosition(1); // increments target and position
+    limiter.resetTime();
+    limiter.getLastTime();
+    limiter.getTimeInterval();
+    limiter.getTargetDelta();
+    limiter.getLastTarget();
+    limiter.getPositionDelta();
+    limiter.getLastPosition();
+    limiter.getTargetDeltaPerTime();
+    limiter.getPreventGoingWrongWay();
+    limiter.getPreventGoingTooFast();
+    limiter.isPosAtTarget();
+    limiter.isPosNotAtTarget();
+    limiter.distToTarget();
 
-  `  bool setVelLimit(float velLim)`  
+    // velocity mode
 
-  `  bool setAccelLimit(float accelLim)`  
+    limiter.setVelConstant(1); // sets velocity immediately
+    limiter.setVelTarget(1); // velocity approaches the set target with limited accel and decel
+    limiter.isPosModeNotVelocity();
+    limiter.getVelTarget();
 
-  `  float getVelLimit()`  
+    // timed moves
 
-  `  float getAccelLimit()`  
-
-  `  void setVelAccelLimits(float velLim, float accLim)`    
-
-  `  void setMaxStoppingAccel(float _maxStoppingAccel = INFINITY)`  
-
-  `  float getMaxStoppingAccel()`  
-
-  `  float getLowPosLimit()`  
-
-  `  float getHighPosLimit()`  
-
-  `  bool setLowPosLimit(float lowLimit)`  
-
-  `  bool setHighPosLimit(float highLimit)`  
-
-  `  void setPosLimits(float lowLimit, float highLimit)`  
-
-  `  void resetTime()`  
-
-  `  unsigned long getLastTime()`  
-
-  `  float getTimeInterval()`  
-
-  `  float getTargetDelta()`  
-
-  `  float getLastTarget()`  
-  
-  `  float getPositionDelta()`
-
-  `  float getLastPosition()`
-
-  `  float getTargetDeltaPerTime()`  
-
-  `  void setPositionPointer(float* _positionPointer)`  
-
-  `  void setVelocityPointer(float* _velocityPointer)`  
-
-  `  bool getPreventGoingWrongWay()`  
-
-  `  void setPreventGoingWrongWay(bool _preventGoingWrongWay)`  
-
-  `  bool getPreventGoingTooFast()`  
-
-  `  void setPreventGoingTooFast(bool _preventGoingTooFast)`  
-
-  `  bool isPosAtTarget()`  
-
-  `  bool isPosNotAtTarget()`  
-
-  `  float distToTarget()`  
-
-  `  void resetVelLimitToOriginal()`
-
-  `  boolean setVelLimitForTimedMove(float _dist, float _time, float _maxVel = NAN)`
-
-  `  boolean setTargetAndVelLimitForTimedMove(float _target, float _time, float _maxVel = NAN)`
+    limiter.setVelLimitForTimedMove(20, 5, NAN); // dist, time, maxVel
+    limiter.setTargetAndVelLimitForTimedMove(10, 5, NAN); // target, time, maxVel
+    limiter.setTargetTimedMovePreferred(10, 5, NAN); // target, time, maxVel
+    limiter.resetVelLimitToOriginal();
 
 
 ## Notes:
