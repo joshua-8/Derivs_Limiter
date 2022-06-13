@@ -82,85 +82,77 @@ Create a Derivs_Limiter object:</h2>
 <p ><em><b>Velocity, position and/or acceleration limits can be set as INFINITY in order to have no limit.</b></em></p>
 <h2><a class="anchor" id="autotoc_md3"></a>
 quick reference: (&lt;a href="https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html" &gt;more detailed reference available here&lt;/a&gt;)</h2>
-<p ><code>float calc()</code> <br  />
-</p>
-<p ><code>float calc(float _target)</code> <br  />
-</p>
-<p ><code>bool setTarget(float _target)</code> <br  />
-</p>
-<p ><code>float getTarget()</code> <br  />
-</p>
-<p ><code>float getPosition()</code> <br  />
-</p>
-<p ><code>float getVelocity()</code> <br  />
-</p>
-<p ><code>float getAcceleration()</code></p>
-<p ><code>void setPositionVelocity(float pos = 0, float vel = 0)</code> <br  />
-</p>
-<p ><code>bool setPosition(float pos = 0)</code> <br  />
-</p>
-<p ><code>bool setVelocity(float vel = 0)</code> <br  />
-</p>
-<p ><code>bool setVelLimit(float velLim)</code> <br  />
-</p>
-<p ><code>bool setAccelLimit(float accelLim)</code> <br  />
-</p>
-<p ><code>float getVelLimit()</code> <br  />
-</p>
-<p ><code>float getAccelLimit()</code> <br  />
-</p>
-<p ><code>void setVelAccelLimits(float velLim, float accLim)</code> <br  />
-</p>
-<p ><code>void setMaxStoppingAccel(float _maxStoppingAccel = INFINITY)</code> <br  />
-</p>
-<p ><code>float getMaxStoppingAccel()</code> <br  />
-</p>
-<p ><code>float getLowPosLimit()</code> <br  />
-</p>
-<p ><code>float getHighPosLimit()</code> <br  />
-</p>
-<p ><code>bool setLowPosLimit(float lowLimit)</code> <br  />
-</p>
-<p ><code>bool setHighPosLimit(float highLimit)</code> <br  />
-</p>
-<p ><code>void setPosLimits(float lowLimit, float highLimit)</code> <br  />
-</p>
-<p ><code>void resetTime()</code> <br  />
-</p>
-<p ><code>unsigned long getLastTime()</code> <br  />
-</p>
-<p ><code>float getTimeInterval()</code> <br  />
-</p>
-<p ><code>float getTargetDelta()</code> <br  />
-</p>
-<p ><code>float getLastTarget()</code> <br  />
-</p>
-<p ><code>float getPositionDelta()</code></p>
-<p ><code>float getLastPosition()</code></p>
-<p ><code>float getTargetDeltaPerTime()</code> <br  />
-</p>
-<p ><code>void setPositionPointer(float* _positionPointer)</code> <br  />
-</p>
-<p ><code>void setVelocityPointer(float* _velocityPointer)</code> <br  />
-</p>
-<p ><code>bool getPreventGoingWrongWay()</code> <br  />
-</p>
-<p ><code>void setPreventGoingWrongWay(bool _preventGoingWrongWay)</code> <br  />
-</p>
-<p ><code>bool getPreventGoingTooFast()</code> <br  />
-</p>
-<p ><code>void setPreventGoingTooFast(bool _preventGoingTooFast)</code> <br  />
-</p>
-<p ><code>bool isPosAtTarget()</code> <br  />
-</p>
-<p ><code>bool isPosNotAtTarget()</code> <br  />
-</p>
-<p ><code>float distToTarget()</code> <br  />
-</p>
-<p ><code>void resetVelLimitToOriginal()</code></p>
-<p ><code>boolean setVelLimitForTimedMove(float _dist, float _time, float _maxVel = NAN)</code></p>
-<p ><code>boolean setTargetAndVelLimitForTimedMove(float _target, float _time, float _maxVel = NAN)</code></p>
-<h1><a class="anchor" id="autotoc_md4"></a>
+<pre class="fragment">// all settings of constructor
+
+limiter.setVelLimit(10);
+limiter.setAccelLimit(5);
+limiter.setDecelLimit(NAN);
+limiter.setTarget(0);
+limiter.setPosition(0);
+limiter.setVelocity(0);
+limiter.setPreventGoingWrongWay(false);
+limiter.setPreventGoingTooFast(false);
+limiter.setLowPosLimit(-INFINITY);
+limiter.setHighPosLimit(INFINITY);
+limiter.setMaxStoppingDecel(2);
+limiter.setPositionPointer(NULL);
+limiter.setVelocityPointer(NULL);
+
+/// settings grouped together for your convenience
+
+limiter.setPositionVelocity(0, 0); // position, velocity
+limiter.setTargetAndPosition(0, 0); // target, position
+limiter.setAccelAndDecelLimits(1, NAN); // accel, decel
+limiter.setVelAccelLimits(1, 1, 1); // vel, accel, decel
+limiter.setPosLimits(-INFINITY, INFINITY); // low limit, high limit
+limiter.setPositionAndTarget(0); // both position and target get set to the same value
+
+// get output
+
+limiter.getPosition();
+limiter.getVelocity();
+limiter.getAcceleration();
+
+// get settings
+
+limiter.getTarget();
+limiter.getVelLimit();
+limiter.getAccelLimit();
+limiter.getDecelLimit();
+limiter.getMaxStoppingDecel();
+limiter.getLowPosLimit();
+limiter.getHighPosLimit();
+
+// other
+limiter.jogPosition(1); // increments target and position
+limiter.resetTime();
+limiter.getLastTime();
+limiter.getTimeInterval();
+limiter.getTargetDelta();
+limiter.getLastTarget();
+limiter.getPositionDelta();
+limiter.getLastPosition();
+limiter.getTargetDeltaPerTime();
+limiter.getPreventGoingWrongWay();
+limiter.getPreventGoingTooFast();
+limiter.isPosAtTarget();
+limiter.isPosNotAtTarget();
+limiter.distToTarget();
+
+// velocity mode
+
+limiter.setVelConstant(1); // sets velocity immediately
+limiter.setVelTarget(1); // velocity approaches the set target with limited accel and decel
+limiter.isPosModeNotVelocity();
+limiter.getVelTarget();
+
+// timed moves
+
+limiter.setVelLimitForTimedMove(20, 5, NAN); // dist, time, maxVel
+limiter.setTargetAndVelLimitForTimedMove(10, 5, NAN); // target, time, maxVel
+limiter.setTargetTimedMovePreferred(10, 5, NAN); // target, time, maxVel
+limiter.resetVelLimitToOriginal();
+</pre><h1><a class="anchor" id="autotoc_md4"></a>
 Notes:</h1>
 <p >During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid. (Also, note that if the deceleration limit is infinity, this value stays zero when position stops)</p>
 <p >NAN (not a number) values are ignored.</p>
