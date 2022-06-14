@@ -16,6 +16,7 @@ Servo myServo;
 void setup()
 {
     Serial.begin(115200);
+    Serial.println("position,velocity,acceleration");
     myServo.attach(9);
 }
 void loop()

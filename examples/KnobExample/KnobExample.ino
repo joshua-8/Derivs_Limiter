@@ -16,6 +16,7 @@ Servo myServo;
 void setup()
 {
     Serial.begin(115200);
+    Serial.println("position,velocity,acceleration");
     myServo.attach(9);
     limiter.setPreventGoingWrongWay(false);
     limiter.setPosLimits(0, 180);
@@ -30,7 +31,5 @@ void loop()
     Serial.print(limiter.getVelocity());
     Serial.print(",");
     Serial.print(limiter.getAcceleration());
-    Serial.print(",");
-    Serial.print(limiter.isPosModeNotVelocity());
     Serial.println();
 }
