@@ -830,14 +830,14 @@ protected:
                 velocity = 0;
             }
             if (velocity != velocityTarget) {
-                if (velocityTarget == 0) {
-                    velocity += constrain(velocityTarget - velocity, -decelLimit * time, decelLimit * time);
-                } else if (velocityTarget > 0) {
+                if (velocity == 0) {
+                    velocity += constrain(velocityTarget - velocity, -accelLimit * time, accelLimit * time);
+                } else if (velocity > 0) {
                     velocity += constrain(velocityTarget - velocity, -decelLimit * time, accelLimit * time);
                     if (velocity < 0) { // prevent decel from crossing zero and causing accel
                         velocity = 0;
                     }
-                } else {
+                } else { // velocity < 0
                     velocity += constrain(velocityTarget - velocity, -accelLimit * time, decelLimit * time);
                     if (velocity > 0) { // prevent decel from crossing zero and causing accel
                         velocity = 0;
