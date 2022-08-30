@@ -27,7 +27,7 @@ The formula in this program supports being run at uneven intervals, and allows f
 
 _**Velocity, position and/or acceleration limits can be set as INFINITY in order to have no limit.**_
 
-### quick reference: ([more detailed reference available here](https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html))
+### quick reference: ( [more detailed reference available here](https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html) )
 
 
     // all settings of constructor
