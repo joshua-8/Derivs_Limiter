@@ -43,7 +43,7 @@ public:
      * @param  _preventGoingWrongWay: (bool) default=false, stop immediately if velocity is going away from target
      * @param  _preventGoingTooFast: (bool) default=false, constrain velocity to within velLimit
      * @param  _posLimitLow: (float) default=-INFINITY, lower bound for position
-     * @param  _posLimitHigh: (float) default=INFINITY, upper bound for position
+     * @param  _posLimitHigh: (float) default=INFINITY, upper bound for position, will be set to _posLimitLow if below _posLimitLow
      * @param  _maxStoppingDecel: (float) default=2, how many times accelLimit can be used to stop in time for target position (can be 1 through INFINITY)
      * @param  _posPointer: set pointer to an external variable that will be read and modified during calc as position.  use &var
      * @param  _velPointer: set pointer to an external variable that will be read and modified during calc as velocity.  use &var
@@ -81,6 +81,37 @@ public:
         maxStoppingDecel = max(_maxStoppingDecel, (float)1.0);
         positionPointer = _posPointer;
         velocityPointer = _velPointer;
+        velocityTarget = 0;
+    }
+
+    /**
+     * @brief  default constructor for Derivs_Limiter
+     * @note  make sure to use the normal constructor after this, this constructor is only to allow arrays of Derivs_Limiters
+     */
+    Derivs_Limiter()
+    {
+        accel = 0;
+        lastTime = 0;
+        velLimit = 0;
+        originalVelLimit = 0;
+        accelLimit = 0;
+        setDecelLimit(NAN);
+        target = 0;
+        posMode = true;
+        lastTarget = 0;
+        targetDelta = 0;
+        position = 0;
+        lastPos = 0;
+        posDelta = 0;
+        velocity = 0;
+        time = 0;
+        preventGoingWrongWay = false;
+        preventGoingTooFast = false;
+        posLimitLow = 0;
+        posLimitHigh = 0;
+        maxStoppingDecel = 1;
+        positionPointer = NULL;
+        velocityPointer = NULL;
         velocityTarget = 0;
     }
 
