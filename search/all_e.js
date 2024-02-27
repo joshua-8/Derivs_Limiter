@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['vellimit_0',['velLimit',['../class_derivs___limiter.html#a604ca823f3ce876f332972264f03509a',1,'Derivs_Limiter']]],
-  ['velocity_1',['velocity',['../class_derivs___limiter.html#a26f00cab04a10b4d5b77e45c0ba18ae4',1,'Derivs_Limiter']]],
-  ['velocitypointer_2',['velocityPointer',['../class_derivs___limiter.html#aa889525515d905a344e3b766b6932ca9',1,'Derivs_Limiter']]],
-  ['velocitytarget_3',['velocityTarget',['../class_derivs___limiter.html#a6db8fc1a7b4a0111e483ac69f5e32e83',1,'Derivs_Limiter']]]
+  ['quick_20reference_3a_20a_20href_20https_3a_20joshua_208_20github_20io_20derivs_5flimiter_20html_20class_5fderivs_5f_5f_5flimiter_20html_20more_20detailed_20reference_20available_20here_20a_0',['quick reference: ( &lt;a href=&quot;https://joshua-8.github.io/Derivs_Limiter/html/class_derivs___limiter.html&quot; &gt;more detailed reference available here&lt;/a&gt; )',['../index.html#autotoc_md3',1,'']]]
 ];
