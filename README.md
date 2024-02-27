@@ -4,6 +4,7 @@ https://github.com/joshua-8/Derivs_Limiter
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/Derivs_Limiter.svg?)](https://www.ardu-badge.com/Derivs_Limiter)
 [![PlatformIO](https://badges.registry.platformio.org/packages/joshua1024/library/Derivs_Limiter.svg)](https://registry.platformio.org/libraries/joshua1024/Derivs_Limiter)
+[![ESP32 Component Registry](https://components.espressif.com/components/joshua-8/derivs_limiter/badge.svg)](https://components.espressif.com/components/joshua-8/derivs_limiter)
 
 [DETAILED DOCUMENTATION](https://joshua-8.github.io/Derivs_Limiter/class_derivs___limiter.html) (made with Doxygen)
 
@@ -109,3 +110,5 @@ During the part of the profile where velocity is decreased, the acceleration is 
 NAN (not a number) values are ignored.
 
 [Here](https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0) is a Processing sketch that I used to test the formula I wrote for this library.
+
+available as an Espressif IDF Component: https://components.espressif.com/components/joshua-8/derivs_limiter
