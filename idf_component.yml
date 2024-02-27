@@ -4,4 +4,4 @@ documentation: https://joshua-8.github.io/Derivs_Limiter/class_derivs___limiter.
 discussion: https://github.com/joshua-8/Derivs_Limiter/discussions
 issues: https://github.com/joshua-8/Derivs_Limiter/issues
 dependencies:
-  espressif/arduino-esp32: ">2.0"
+  espressif/arduino-esp32: "~2.0"
