@@ -73,7 +73,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md__r_e_a_d_m_e"></a> <a href="https://github.com/joshua-8/Derivs_Limiter">https://github.com/joshua-8/Derivs_Limiter</a></p>
-<p><a href="https://www.ardu-badge.com/Derivs_Limiter"><img src="https://www.ardu-badge.com/badge/Derivs_Limiter.svg?" alt="arduino-library-badge" style="pointer-events: none;" class="inline"/></a> <a href="https://registry.platformio.org/libraries/joshua1024/Derivs_Limiter"><img src="https://badges.registry.platformio.org/packages/joshua1024/library/Derivs_Limiter.svg" alt="PlatformIO" style="pointer-events: none;" class="inline"/></a></p>
+<p><a href="https://www.ardu-badge.com/Derivs_Limiter"><img src="https://www.ardu-badge.com/badge/Derivs_Limiter.svg?" alt="arduino-library-badge" style="pointer-events: none;" class="inline"/></a> <a href="https://registry.platformio.org/libraries/joshua1024/Derivs_Limiter"><img src="https://badges.registry.platformio.org/packages/joshua1024/library/Derivs_Limiter.svg" alt="PlatformIO" style="pointer-events: none;" class="inline"/></a> <a href="https://components.espressif.com/components/joshua-8/derivs_limiter"><img src="https://components.espressif.com/components/joshua-8/derivs_limiter/badge.svg" alt="ESP32 Component Registry" style="pointer-events: none;" class="inline"/></a></p>
 <p><a href="https://joshua-8.github.io/Derivs_Limiter/class_derivs___limiter.html">DETAILED DOCUMENTATION</a> (made with Doxygen)</p>
 <p>Please ask any questions <a href="https://github.com/joshua-8/Derivs_Limiter/discussions">here</a>.</p>
 <p>This library can be used to limit the first and second derivative of a variable as it approaches a target value.</p>
@@ -163,7 +163,8 @@ limiter.resetVelLimitToOriginal();
 Notes:</h1>
 <p>During the part of the profile where velocity is decreased, the acceleration is a bit "spiky" as the code switches back and forth across the threshold for whether or not it needs to start decelerating. Acceleration should not be used directly, only position and velocity are really valid. (Also, note that if the deceleration limit is infinity, this value stays zero when position stops)</p>
 <p>NAN (not a number) values are ignored.</p>
-<p><a href="https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0">Here</a> is a Processing sketch that I used to test the formula I wrote for this library. </p>
+<p><a href="https://gist.github.com/joshua-8/3209f2f400a0e68dead911b8743fc5f0">Here</a> is a Processing sketch that I used to test the formula I wrote for this library.</p>
+<p>available as an Espressif IDF Component: <a href="https://components.espressif.com/components/joshua-8/derivs_limiter">https://components.espressif.com/components/joshua-8/derivs_limiter</a> </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
